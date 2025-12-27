@@ -114,7 +114,7 @@ const surveyData = {
             required: true,
             text: 'Besides your MCF stipend, do you have any other source of income?',
             field: 'other_income',
-            context: 'Students with supplementary income may have different pain points than stipend-only students.',
+            
             options: [
                 { value: 'stipend_only', label: 'No, the stipend is my only income' },
                 { value: 'part_time', label: 'Yes, I have a part-time job or freelance work' },
