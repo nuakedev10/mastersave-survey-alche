@@ -3,139 +3,3375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Financial Wellness Survey | SiLo.Grp</title>
-    <meta name="description" content="Help us understand student financial needs. A research survey by SiLo.Grp for the Mastersave project.">
+    <title>MCF Scholars Stipend Survey | SiLo.Grp</title>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
-    
-    <!-- Google Fonts -->
+    <!-- SF Pro Font Alternative (Inter is the closest free alternative) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #3B82F6;
+            --mcf-orange: #FF6B00;
+            --mcf-orange-light: #FF8534;
+            --success-green: #10B981;
+            --warning-yellow: #F59E0B;
+            --error-red: #EF4444;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ===== Reset & Base Styles ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--gray-800);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== Background with Campus Image ===== */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.1;
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(249, 250, 251, 0.9) 50%,
+                rgba(243, 244, 246, 0.95) 100%
+            );
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary-blue);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--mcf-orange);
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--success-green);
+            top: 50%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(20px) rotate(-5deg); }
+        }
+
+        /* ===== Main Container ===== */
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* ===== Header with Logos ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+            transition: transform var(--transition-normal);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-placeholder {
+            height: 45px;
+            padding: 8px 16px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .logo-mcf {
+            color: var(--mcf-orange);
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-color: #FDBA74;
+        }
+
+        .logo-silo {
+            color: var(--primary-blue);
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-color: #93C5FD;
+        }
+
+        /* ===== Survey Card ===== */
+        .survey-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            border: 1px solid var(--gray-100);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Progress Bar ===== */
+        .progress-container {
+            padding: 24px 32px;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .progress-title i {
+            width: 18px;
+            height: 18px;
+            color: var(--primary-blue);
+        }
+
+        .progress-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .progress-percentage {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            background: var(--gray-100);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .progress-bar-wrapper {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ===== Survey Content ===== */
+        .survey-content {
+            padding: 40px;
+        }
+
+        /* ===== Welcome Section ===== */
+        .welcome-section {
+            text-align: center;
+            padding: 20px 0 40px;
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(37, 99, 235, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 50px rgba(37, 99, 235, 0.4); }
+        }
+
+        .welcome-icon i {
+            width: 40px;
+            height: 40px;
+            color: var(--white);
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .welcome-description {
+            font-size: 15px;
+            color: var(--gray-600);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .incentive-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            padding: 12px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid #FCD34D;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .incentive-banner i {
+            width: 20px;
+            height: 20px;
+            color: var(--warning-yellow);
+        }
+
+        .incentive-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        /* ===== Section Headers ===== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-icon i {
+            width: 24px;
+            height: 24px;
+            color: var(--white);
+        }
+
+        .section-icon.orange {
+            background: linear-gradient(135deg, var(--mcf-orange) 0%, var(--mcf-orange-light) 100%);
+        }
+
+        .section-icon.green {
+            background: linear-gradient(135deg, var(--success-green) 0%, #34D399 100%);
+        }
+
+        .section-info h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .section-info p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* ===== Question Styles ===== */
+        .question-group {
+            margin-bottom: 36px;
+            padding: 24px;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-100);
+            transition: all var(--transition-normal);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-group:hover {
+            border-color: var(--gray-200);
+            box-shadow: var(--shadow-md);
+        }
+
+        .question-group.has-error {
+            border-color: var(--error-red);
+            background: #FEF2F2;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .question-number {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .question-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-800);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .required-star {
+            color: var(--error-red);
+            margin-left: 4px;
+        }
+
+        .question-hint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+            margin-left: 40px;
+        }
+
+        .question-hint i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ===== Option Styles ===== */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 40px;
+        }
+
+        .option-item {
+            position: relative;
+        }
+
+        .option-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .option-label:hover {
+            border-color: var(--primary-blue-light);
+            background: #F0F7FF;
+        }
+
+        .option-input:checked + .option-label {
+            border-color: var(--primary-blue);
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            color: var(--primary-blue-dark);
+            font-weight: 500;
+        }
+
+        .option-radio, .option-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--transition-fast);
+        }
+
+        .option-checkbox {
+            border-radius: 6px;
+        }
+
+        .option-input:checked + .option-label .option-radio,
+        .option-input:checked + .option-label .option-checkbox {
+            border-color: var(--primary-blue);
+            background: var(--primary-blue);
+        }
+
+        .option-radio::after, .option-checkbox::after {
+            content: '';
+            display: none;
+        }
+
+        .option-input:checked + .option-label .option-radio::after {
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--white);
+            border-radius: 50%;
+        }
+
+        .option-input:checked + .option-label .option-checkbox::after {
+            display: block;
+            width: 12px;
+            height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            background-size: contain;
+        }
+
+        /* ===== Text Input Styles ===== */
+        .text-input, .textarea-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--gray-800);
+            background: var(--white);
+            transition: all var(--transition-fast);
+            margin-left: 40px;
+            width: calc(100% - 40px);
+        }
+
+        .text-input:focus, .textarea-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .textarea-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* ===== Slider Styles ===== */
+        .slider-container {
+            margin-left: 40px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .slider-input {
+            width: 100%;
+            height: 8px;
+            border-radius: 10px;
+            background: var(--gray-200);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+            transition: all var(--transition-fast);
+        }
+
+        .slider-input::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        /* ===== Percentage Grid ===== */
+        .percentage-grid {
+            display: grid;
+            gap: 12px;
+            margin-left: 40px;
+        }
+
+        .percentage-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .percentage-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .percentage-label i {
+            width: 18px;
+            height: 18px;
+            color: var(--gray-400);
+        }
+
+        .percentage-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .percentage-input {
+            width: 60px;
+            padding: 8px 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--gray-800);
+        }
+
+        .percentage-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .percentage-total {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            margin-top: 8px;
+        }
+
+        .percentage-total-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .percentage-total-value {
+            font-size: 18px;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: var(--radius-sm);
+        }
+
+        .percentage-total-value.valid {
+            background: #D1FAE5;
+            color: var(--success-green);
+        }
+
+        .percentage-total-value.invalid {
+            background: #FEE2E2;
+            color: var(--error-red);
+        }
+
+        /* ===== Navigation Buttons ===== */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid var(--gray-100);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+        }
+
+        .btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-600);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--success-green) 0%, #34D399 100%);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
+        /* ===== Section Navigation Dots ===== */
+        .section-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 24px;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .section-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gray-300);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .section-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        .section-dot.completed {
+            background: var(--success-green);
+        }
+
+        /* ===== Success Screen ===== */
+        .success-screen {
+            text-align: center;
+            padding: 60px 40px;
+            display: none;
+        }
+
+        .success-screen.active {
+            display: block;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--success-green) 0%, #34D399 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            animation: successPulse 0.6s ease-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-icon i {
+            width: 50px;
+            height: 50px;
+            color: var(--white);
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: var(--gray-600);
+            max-width: 400px;
+            margin: 0 auto 32px;
+            line-height: 1.7;
+        }
+
+        .success-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 24px;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .success-info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .success-info-item i {
+            width: 20px;
+            height: 20px;
+            color: var(--success-green);
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray-500);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Admin Link ===== */
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: var(--gray-800);
+            color: var(--white);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-fast);
+            z-index: 100;
+        }
+
+        .admin-link:hover {
+            background: var(--gray-900);
+            transform: translateY(-2px);
+        }
+
+        .admin-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 12px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .survey-content {
+                padding: 24px 20px;
+            }
+
+            .welcome-title {
+                font-size: 22px;
+            }
+
+            .question-group {
+                padding: 20px 16px;
+            }
+
+            .options-list, .text-input, .textarea-input, .slider-container, .percentage-grid {
+                margin-left: 0;
+            }
+
+            .text-input, .textarea-input {
+                width: 100%;
+            }
+
+            .question-header {
+                flex-wrap: wrap;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .percentage-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .admin-link {
+                bottom: 10px;
+                right: 10px;
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+        }
+
+        /* ===== Loading Animation ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== Toast Notifications ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 350px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-green);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error-red);
+        }
+
+        .toast i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .toast.success i {
+            color: var(--success-green);
+        }
+
+        .toast.error i {
+            color: var(--error-red);
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        /* Hidden sections */
+        .survey-section {
+            display: none;
+        }
+
+        .survey-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+    </style>
 </head>
 <body>
-    <!-- Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-        <span class="progress-text" id="progressText">0%</span>
-    </div>
-
-    <!-- Survey Container -->
-    <div class="survey-container">
-        <!-- Welcome Screen -->
-        <div class="slide active" id="slide-welcome">
-            <div class="slide-content welcome-slide">
-                <div class="logo-container">
-                    <div class="logo">
-                        <span class="logo-silo">SiLo</span><span class="logo-grp">.Grp</span>
-                    </div>
-                    <span class="logo-tagline">Research Division</span>
-                </div>
-                
-                <h1>Student Financial Wellness Survey</h1>
-                <p class="subtitle">Help us understand how MCF scholars manage their stipends</p>
-                
-                <div class="info-box">
-                    <div class="info-item">
-                        <span class="info-icon">⏱️</span>
-                        <span>8-12 minutes</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">🔒</span>
-                        <span>Anonymous & Confidential</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">🎯</span>
-                        <span>34 Questions</span>
-                    </div>
-                </div>
-                
-                <p class="description">
-                    Your responses will help us build better financial tools for students like you. 
-                    This survey is conducted by <strong>SiLo.Grp</strong> as part of the Mastersave research initiative.
-                </p>
-                
-                <button class="btn btn-primary btn-start" onclick="startSurvey()">
-                    Start Survey
-                    <span class="btn-arrow">→</span>
-                </button>
-                
-                <p class="privacy-note">
-                    By continuing, you agree to participate in this research. Your responses are anonymous 
-                    unless you choose to provide contact information for follow-up.
-                </p>
-            </div>
+    <!-- Background -->
+    <div class="background-container">
+        <div class="background-image" id="campusBackground"></div>
+        <div class="background-overlay"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
         </div>
-
-        <!-- Section Headers will be inserted dynamically -->
-        
-        <!-- Question Slides Container -->
-        <div id="questionsContainer"></div>
-
-        <!-- Thank You Screen -->
-        <div class="slide" id="slide-thankyou">
-            <div class="slide-content thankyou-slide">
-                <div class="success-icon">✓</div>
-                <h1>Thank You!</h1>
-                <p class="subtitle">Your response has been recorded successfully.</p>
-                
-                <div class="thankyou-message">
-                    <p>Your insights are invaluable to our research. Together, we're building financial tools that truly serve African students.</p>
-                </div>
-                
-                <div class="share-section">
-                    <p>Help us reach more students:</p>
-                    <div class="share-buttons">
-                        <button class="btn btn-share whatsapp" onclick="shareWhatsApp()">
-                            <span>📱</span> Share on WhatsApp
-                        </button>
-                        <button class="btn btn-share copy" onclick="copyLink()">
-                            <span>🔗</span> Copy Link
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="logo-footer">
-                    <div class="logo small">
-                        <span class="logo-silo">SiLo</span><span class="logo-grp">.Grp</span>
-                    </div>
-                    <p>Building the future of student finance</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="navigation" id="navigation">
-        <button class="nav-btn btn-back" id="btnBack" onclick="previousSlide()">
-            <span>←</span> Back
-        </button>
-        <div class="nav-spacer"></div>
-        <button class="nav-btn btn-next" id="btnNext" onclick="nextSlide()">
-            Next <span>→</span>
-        </button>
-    </div>
-
-    <!-- Keyboard hint -->
-    <div class="keyboard-hint" id="keyboardHint">
-        Press <kbd>Enter</kbd> to continue
     </div>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader"></div>
-        <p>Submitting your response...</p>
+        <div class="loading-spinner"></div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Scripts -->
-    <script src="config.js"></script>
-    <script src="script.js"></script>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header with Logos -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-placeholder logo-mcf">
+                    <i data-lucide="credit-card"></i>
+                    <span style="margin-left: 6px;">MCF</span>
+                </div>
+            </div>
+            <div class="logo-container">
+                <div class="logo-placeholder logo-silo">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span style="margin-left: 6px;">SiLo.Grp</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Survey Card -->
+        <div class="survey-card">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <div class="progress-title">
+                        <i data-lucide="trending-up"></i>
+                        <span>Survey Progress</span>
+                    </div>
+                    <div class="progress-stats">
+                        <span class="progress-text">Section <span id="currentSection">1</span> of <span id="totalSections">10</span></span>
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Survey Content -->
+            <div class="survey-content">
+                <form id="surveyForm">
+                    <!-- Section 0: Welcome -->
+                    <div class="survey-section active" data-section="0">
+                        <div class="welcome-section">
+                            <div class="welcome-icon">
+                                <i data-lucide="clipboard-check"></i>
+                            </div>
+                            <h1 class="welcome-title">Understanding How MCF Scholars Manage Their Stipends</h1>
+                            <p class="welcome-subtitle">A research initiative by SiLo.Grp</p>
+                            <p class="welcome-description">
+                                Hi! This 10-minute survey is part of a student-led project to understand how Mastercard Foundation scholars manage their monthly stipends. Your honest responses will help us design better financial tools for students like you. All responses are anonymous and will only be used for research purposes.
+                            </p>
+                            <div class="incentive-banner">
+                                <i data-lucide="gift"></i>
+                                <span class="incentive-text">5 randomly selected participants will win free screen protectors + pilot program access!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 1: Demographics -->
+                    <div class="survey-section" data-section="1">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i data-lucide="user-circle"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Demographics & Context</h2>
+                                <p>Tell us a bit about yourself</p>
+                            </div>
+                        </div>
+
+                        <!-- Q1 -->
+                        <div class="question-group" data-question="1">
+                            <div class="question-header">
+                                <span class="question-number">1</span>
+                                <label class="question-label">What year of study are you currently in?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q1_year" id="q1_year1" value="Year 1" class="option-input" required>
+                                    <label for="q1_year1" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Year 1</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q1_year" id="q1_year2" value="Year 2" class="option-input">
+                                    <label for="q1_year2" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Year 2</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q1_year" id="q1_year3" value="Year 3" class="option-input">
+                                    <label for="q1_year3" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Year 3</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q1_year" id="q1_year4" value="Year 4+" class="option-input">
+                                    <label for="q1_year4" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Year 4+</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q1_year" id="q1_year5" value="Graduate/Masters" class="option-input">
+                                    <label for="q1_year5" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Graduate/Masters student</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="question-group" data-question="2">
+                            <div class="question-header">
+                                <span class="question-number">2</span>
+                                <label class="question-label">What is your gender?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q2_gender" id="q2_male" value="Male" class="option-input" required>
+                                    <label for="q2_male" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Male</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q2_gender" id="q2_female" value="Female" class="option-input">
+                                    <label for="q2_female" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Female</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q2_gender" id="q2_nonbinary" value="Non-binary/Other" class="option-input">
+                                    <label for="q2_nonbinary" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Non-binary/Other</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q2_gender" id="q2_prefer_not" value="Prefer not to say" class="option-input">
+                                    <label for="q2_prefer_not" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Prefer not to say</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="question-group" data-question="3">
+                            <div class="question-header">
+                                <span class="question-number">3</span>
+                                <label class="question-label">Which ALU campus are you based at?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q3_campus" id="q3_rwanda" value="ALU Rwanda (Kigali)" class="option-input" required>
+                                    <label for="q3_rwanda" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>ALU Rwanda (Kigali)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q3_campus" id="q3_mauritius" value="ALU Mauritius" class="option-input">
+                                    <label for="q3_mauritius" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>ALU Mauritius</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q3_campus" id="q3_remote" value="Remote/Off-campus" class="option-input">
+                                    <label for="q3_remote" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Currently remote/off-campus</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="question-group" data-question="4">
+                            <div class="question-header">
+                                <span class="question-number">4</span>
+                                <label class="question-label">Besides your MCF stipend, do you have any other source of income?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q4_income" id="q4_stipend_only" value="No, stipend only" class="option-input" required>
+                                    <label for="q4_stipend_only" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, the stipend is my only income</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q4_income" id="q4_parttime" value="Part-time/Freelance" class="option-input">
+                                    <label for="q4_parttime" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, I have a part-time job or freelance work</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q4_income" id="q4_family" value="Family support" class="option-input">
+                                    <label for="q4_family" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, I receive support from family</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q4_income" id="q4_scholarship" value="Another scholarship" class="option-input">
+                                    <label for="q4_scholarship" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, I have another scholarship or grant</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q4_income" id="q4_multiple" value="Multiple sources" class="option-input">
+                                    <label for="q4_multiple" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, multiple additional sources</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Stipend Management Behavior -->
+                    <div class="survey-section" data-section="2">
+                        <div class="section-header">
+                            <div class="section-icon orange">
+                                <i data-lucide="wallet"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Current Stipend Management</h2>
+                                <p>How do you currently handle your monthly stipend?</p>
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="question-group" data-question="5">
+                            <div class="question-header">
+                                <span class="question-number">5</span>
+                                <label class="question-label">When you receive your monthly stipend, what do you typically do first?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="info"></i>
+                                <span>Select the ONE that best describes you</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q5_first_action" id="q5_divide" value="Mentally divide into categories" class="option-input" required>
+                                    <label for="q5_divide" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Mentally divide it into categories (rent, food, transport, etc.)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q5_first_action" id="q5_debts" value="Pay off debts" class="option-input">
+                                    <label for="q5_debts" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Pay off any debts or loans immediately</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q5_first_action" id="q5_save" value="Transfer to savings" class="option-input">
+                                    <label for="q5_save" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Transfer some to savings before spending</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q5_first_action" id="q5_spend" value="Spend without plan" class="option-input">
+                                    <label for="q5_spend" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Start spending on immediate needs without a specific plan</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q5_first_action" id="q5_family" value="Send to family" class="option-input">
+                                    <label for="q5_family" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Send a portion to family back home</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q5_first_action" id="q5_other" value="Other" class="option-input">
+                                    <label for="q5_other" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q5_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q5_other_input">
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="question-group" data-question="6">
+                            <div class="question-header">
+                                <span class="question-number">6</span>
+                                <label class="question-label">How would you describe your spending pattern throughout the month?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q6_pattern" id="q6_same" value="Same each week" class="option-input" required>
+                                    <label for="q6_same" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I spend roughly the same amount each week</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q6_pattern" id="q6_front" value="More first two weeks" class="option-input">
+                                    <label for="q6_front" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I spend more in the first two weeks, then cut back</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q6_pattern" id="q6_back" value="Careful then free" class="option-input">
+                                    <label for="q6_back" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I spend carefully at first, then more freely toward the end</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q6_pattern" id="q6_unpredictable" value="Unpredictable" class="option-input">
+                                    <label for="q6_unpredictable" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>My spending is unpredictable — it depends on what comes up</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q6_pattern" id="q6_runout" value="Run out early" class="option-input">
+                                    <label for="q6_runout" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I run out of money before the month ends and have to borrow or cut back significantly</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="question-group" data-question="7">
+                            <div class="question-header">
+                                <span class="question-number">7</span>
+                                <label class="question-label">In the past 3 months, how often have you run out of stipend money before the next disbursement?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q7_runout" id="q7_never" value="Never" class="option-input" required>
+                                    <label for="q7_never" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Never</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q7_runout" id="q7_once" value="Once" class="option-input">
+                                    <label for="q7_once" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Once</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q7_runout" id="q7_twice" value="Twice" class="option-input">
+                                    <label for="q7_twice" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Twice</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q7_runout" id="q7_every" value="Every month" class="option-input">
+                                    <label for="q7_every" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Every month</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q7_runout" id="q7_almost" value="Almost every month with stress" class="option-input">
+                                    <label for="q7_almost" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Almost every month, and it causes significant stress</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="question-group" data-question="8">
+                            <div class="question-header">
+                                <span class="question-number">8</span>
+                                <label class="question-label">When you run short on money before the end of the month, what do you typically do?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_friends" value="Borrow from friends" class="option-input">
+                                    <label for="q8_friends" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Borrow from friends or classmates</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_family" value="Borrow from family" class="option-input">
+                                    <label for="q8_family" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Borrow from family</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_mobile" value="Mobile money loans" class="option-input">
+                                    <label for="q8_mobile" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Use mobile money loans (e.g., MoKash, MTN MoMo loans)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_meals" value="Skip meals" class="option-input">
+                                    <label for="q8_meals" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Skip meals or reduce food quality</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_social" value="Avoid social" class="option-input">
+                                    <label for="q8_social" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Avoid social activities</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_savings" value="Use savings" class="option-input">
+                                    <label for="q8_savings" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Use savings I had set aside</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_advance" value="Ask for advance" class="option-input">
+                                    <label for="q8_advance" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Ask for an advance or emergency support</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_na" value="N/A" class="option-input">
+                                    <label for="q8_na" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't run short — this doesn't apply to me</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q8_short[]" id="q8_other" value="Other" class="option-input">
+                                    <label for="q8_other" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q8_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q8_other_input">
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="question-group" data-question="9">
+                            <div class="question-header">
+                                <span class="question-number">9</span>
+                                <label class="question-label">Have you ever taken a mobile money loan or any informal loan to cover expenses before your next stipend arrived?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q9_loan" id="q9_multiple" value="Multiple times" class="option-input" required>
+                                    <label for="q9_multiple" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, multiple times</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q9_loan" id="q9_once" value="Once or twice" class="option-input">
+                                    <label for="q9_once" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, once or twice</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q9_loan" id="q9_considered" value="Considered" class="option-input">
+                                    <label for="q9_considered" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, but I've considered it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q9_loan" id="q9_never" value="Never" class="option-input">
+                                    <label for="q9_never" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, never</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Spending Breakdown -->
+                    <div class="survey-section" data-section="3">
+                        <div class="section-header">
+                            <div class="section-icon green">
+                                <i data-lucide="pie-chart"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Spending Breakdown & Awareness</h2>
+                                <p>Where does your money go each month?</p>
+                            </div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="question-group" data-question="10">
+                            <div class="question-header">
+                                <span class="question-number">10</span>
+                                <label class="question-label">Approximately what percentage of your monthly stipend goes to each category?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="info"></i>
+                                <span>Estimates are fine — should total roughly 100%</span>
+                            </div>
+                            <div class="percentage-grid">
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="home"></i>
+                                        <span>Accommodation/Rent</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_accommodation" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="utensils"></i>
+                                        <span>Food and groceries</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_food" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="bus"></i>
+                                        <span>Transport</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_transport" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="smartphone"></i>
+                                        <span>Airtime and data</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_airtime" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="shirt"></i>
+                                        <span>Personal care and clothing</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_personal" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="music"></i>
+                                        <span>Entertainment and social</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_entertainment" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="piggy-bank"></i>
+                                        <span>Savings</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_savings" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="users"></i>
+                                        <span>Sending to family</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_family" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-row">
+                                    <div class="percentage-label">
+                                        <i data-lucide="more-horizontal"></i>
+                                        <span>Other</span>
+                                    </div>
+                                    <div class="percentage-input-wrapper">
+                                        <input type="number" name="q10_other" class="percentage-input" min="0" max="100" value="0" data-percent>
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                <div class="percentage-total">
+                                    <span class="percentage-total-label">Total:</span>
+                                    <span class="percentage-total-value invalid" id="percentageTotal">0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q11 -->
+                        <div class="question-group" data-question="11">
+                            <div class="question-header">
+                                <span class="question-number">11</span>
+                                <label class="question-label">Which spending category do you find hardest to control?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select up to 2</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_food" value="Food" class="option-input" data-max="2">
+                                    <label for="q11_food" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Food (eating out, snacks, delivery)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_entertainment" value="Entertainment" class="option-input" data-max="2">
+                                    <label for="q11_entertainment" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Entertainment and social activities</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_airtime" value="Airtime/Data" class="option-input" data-max="2">
+                                    <label for="q11_airtime" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Airtime and data bundles</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_clothing" value="Clothing" class="option-input" data-max="2">
+                                    <label for="q11_clothing" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Clothing and personal items</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_requests" value="Requests" class="option-input" data-max="2">
+                                    <label for="q11_requests" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Unplanned requests from friends or family</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_impulse" value="Impulse online" class="option-input" data-max="2">
+                                    <label for="q11_impulse" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Impulse online purchases</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_transport" value="Transport" class="option-input" data-max="2">
+                                    <label for="q11_transport" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Transport (taxis, motos when you could walk)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q11_hard[]" id="q11_none" value="None" class="option-input" data-max="2">
+                                    <label for="q11_none" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't struggle to control any category</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q12 -->
+                        <div class="question-group" data-question="12">
+                            <div class="question-header">
+                                <span class="question-number">12</span>
+                                <label class="question-label">How often do you make purchases that you later regret or feel were unnecessary?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q12_regret" id="q12_very" value="Very often" class="option-input" required>
+                                    <label for="q12_very" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very often (multiple times per week)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q12_regret" id="q12_often" value="Often" class="option-input">
+                                    <label for="q12_often" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Often (a few times per month)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q12_regret" id="q12_sometimes" value="Sometimes" class="option-input">
+                                    <label for="q12_sometimes" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Sometimes (once or twice a month)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q12_regret" id="q12_rarely" value="Rarely" class="option-input">
+                                    <label for="q12_rarely" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Rarely</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q12_regret" id="q12_never" value="Never" class="option-input">
+                                    <label for="q12_never" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Never</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q13 -->
+                        <div class="question-group" data-question="13">
+                            <div class="question-header">
+                                <span class="question-number">13</span>
+                                <label class="question-label">What typically triggers your unplanned or impulse spending?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_peer" value="Peer pressure" class="option-input">
+                                    <label for="q13_peer" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Peer pressure or social situations</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_emotional" value="Emotional state" class="option-input">
+                                    <label for="q13_emotional" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Emotional state (stress, boredom, celebration)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_sales" value="Sales/Deals" class="option-input">
+                                    <label for="q13_sales" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Sales, promotions, or "good deals"</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_convenience" value="Convenience" class="option-input">
+                                    <label for="q13_convenience" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Convenience (easier to buy than to plan)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_none" value="No impulse spending" class="option-input">
+                                    <label for="q13_none" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't experience impulse spending</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Savings Behavior -->
+                    <div class="survey-section" data-section="4">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i data-lucide="piggy-bank"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Savings Behavior & Barriers</h2>
+                                <p>Understanding your saving habits</p>
+                            </div>
+                        </div>
+
+                        <!-- Q14 -->
+                        <div class="question-group" data-question="14">
+                            <div class="question-header">
+                                <span class="question-number">14</span>
+                                <label class="question-label">Do you currently save any portion of your monthly stipend?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q14_save" id="q14_consistently" value="Consistently" class="option-input" required>
+                                    <label for="q14_consistently" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, consistently every month</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q14_save" id="q14_occasionally" value="Occasionally" class="option-input">
+                                    <label for="q14_occasionally" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, but only occasionally or inconsistently</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q14_save" id="q14_try" value="Try but can't" class="option-input">
+                                    <label for="q14_try" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I try to, but usually can't manage it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q14_save" id="q14_no" value="Don't save" class="option-input">
+                                    <label for="q14_no" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, I don't save at all</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q15 -->
+                        <div class="question-group" data-question="15">
+                            <div class="question-header">
+                                <span class="question-number">15</span>
+                                <label class="question-label">If you do save (or try to), where do you keep your savings?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_main_wallet" value="Main mobile money" class="option-input">
+                                    <label for="q15_main_wallet" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>In my main mobile money wallet</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_separate" value="Separate mobile money" class="option-input">
+                                    <label for="q15_separate" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>In a separate mobile money account</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_bank" value="Bank savings" class="option-input">
+                                    <label for="q15_bank" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>In a bank savings account</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_friend" value="With friend/family" class="option-input">
+                                    <label for="q15_friend" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>With a friend or family member (for safekeeping)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_cash" value="Cash hidden" class="option-input">
+                                    <label for="q15_cash" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Cash hidden somewhere safe</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_app" value="Savings app" class="option-input">
+                                    <label for="q15_app" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I use a savings app or platform</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_dont" value="Don't save" class="option-input">
+                                    <label for="q15_dont" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't currently save</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q15_app_specify" class="text-input" placeholder="Which app do you use?" style="margin-top: 12px; display: none;" id="q15_app_input">
+                        </div>
+
+                        <!-- Q16 -->
+                        <div class="question-group" data-question="16">
+                            <div class="question-header">
+                                <span class="question-number">16</span>
+                                <label class="question-label">What is the main reason you don't save more?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="info"></i>
+                                <span>Select the ONE biggest barrier</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_barely" value="Barely enough" class="option-input" required>
+                                    <label for="q16_barely" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>My stipend is barely enough to cover basic expenses</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_intend" value="Intend but spend" class="option-input">
+                                    <label for="q16_intend" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I intend to save but end up spending it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_no_goal" value="No specific goal" class="option-input">
+                                    <label for="q16_no_goal" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I don't have a specific goal to save toward</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_pointless" value="Feels pointless" class="option-input">
+                                    <label for="q16_pointless" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Saving feels pointless — the interest is too low</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_trust" value="Don't trust" class="option-input">
+                                    <label for="q16_trust" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I don't trust banks or financial apps with my money</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_how" value="Don't know how" class="option-input">
+                                    <label for="q16_how" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I don't know how to save effectively</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_family" value="Family obligations" class="option-input">
+                                    <label for="q16_family" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Family obligations take priority</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_enough" value="Save enough" class="option-input">
+                                    <label for="q16_enough" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I actually save enough — this isn't a problem for me</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q17 -->
+                        <div class="question-group" data-question="17">
+                            <div class="question-header">
+                                <span class="question-number">17</span>
+                                <label class="question-label">Have you ever saved money for a specific goal (e.g., laptop, travel, emergency fund)?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q17_goal" id="q17_reached" value="Reached goal" class="option-input" required>
+                                    <label for="q17_reached" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, and I successfully reached the goal</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q17_goal" id="q17_withdrew" value="Withdrew early" class="option-input">
+                                    <label for="q17_withdrew" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, but I withdrew the money before reaching the goal</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q17_goal" id="q17_like_to" value="Would like to" class="option-input">
+                                    <label for="q17_like_to" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, but I'd like to</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q17_goal" id="q17_not_interested" value="Not interested" class="option-input">
+                                    <label for="q17_not_interested" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, I'm not interested in goal-based saving</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q18 -->
+                        <div class="question-group" data-question="18" id="q18_container" style="display: none;">
+                            <div class="question-header">
+                                <span class="question-number">18</span>
+                                <label class="question-label">If you saved toward a goal but withdrew early, what caused you to withdraw?</label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q18_withdraw" id="q18_emergency" value="Emergency" class="option-input">
+                                    <label for="q18_emergency" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>An unexpected emergency</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q18_withdraw" id="q18_wanted" value="Wanted something" class="option-input">
+                                    <label for="q18_wanted" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I saw something I wanted to buy</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q18_withdraw" id="q18_help" value="Help someone" class="option-input">
+                                    <label for="q18_help" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>A friend or family member needed help</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q18_withdraw" id="q18_forgot" value="Forgot why" class="option-input">
+                                    <label for="q18_forgot" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I forgot why I was saving and just used it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q18_withdraw" id="q18_other" value="Other" class="option-input">
+                                    <label for="q18_other" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q18_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q18_other_input">
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Financial Tools -->
+                    <div class="survey-section" data-section="5">
+                        <div class="section-header">
+                            <div class="section-icon orange">
+                                <i data-lucide="smartphone"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Financial Tools & Literacy</h2>
+                                <p>Your experience with money management tools</p>
+                            </div>
+                        </div>
+
+                        <!-- Q19 -->
+                        <div class="question-group" data-question="19">
+                            <div class="question-header">
+                                <span class="question-number">19</span>
+                                <label class="question-label">Do you currently use any app or tool to track your spending or manage your budget?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q19_tool" id="q19_yes" value="Yes" class="option-input" required>
+                                    <label for="q19_yes" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q19_tool" id="q19_tried" value="Tried and stopped" class="option-input">
+                                    <label for="q19_tried" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, but I've tried one before and stopped using it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q19_tool" id="q19_never" value="Never tried" class="option-input">
+                                    <label for="q19_never" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, I've never tried one</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q19_tool" id="q19_manual" value="Manual methods" class="option-input">
+                                    <label for="q19_manual" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, I use manual methods (notebook, spreadsheet, mental tracking)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q19_app_specify" class="text-input" placeholder="Which app do you use?" style="margin-top: 12px; display: none;" id="q19_app_input">
+                        </div>
+
+                        <!-- Q20 -->
+                        <div class="question-group" data-question="20" id="q20_container" style="display: none;">
+                            <div class="question-header">
+                                <span class="question-number">20</span>
+                                <label class="question-label">If you tried a budgeting app before and stopped, why did you stop?</label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q20_why_stopped" id="q20_complicated" value="Too complicated" class="option-input">
+                                    <label for="q20_complicated" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>It was too complicated</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q20_why_stopped" id="q20_manual" value="Too much input" class="option-input">
+                                    <label for="q20_manual" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>It required too much manual input</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q20_why_stopped" id="q20_not_designed" value="Not for students" class="option-input">
+                                    <label for="q20_not_designed" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>It wasn't designed for my situation (student, stipend-based)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q20_why_stopped" id="q20_forgot" value="Forgot to use" class="option-input">
+                                    <label for="q20_forgot" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I forgot to use it consistently</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q20_why_stopped" id="q20_language" value="Language" class="option-input">
+                                    <label for="q20_language" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>It wasn't available in my preferred language</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q20_why_stopped" id="q20_other" value="Other" class="option-input">
+                                    <label for="q20_other" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q20_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q20_other_input">
+                        </div>
+
+                        <!-- Q21 -->
+                        <div class="question-group" data-question="21">
+                            <div class="question-header">
+                                <span class="question-number">21</span>
+                                <label class="question-label">How confident do you feel about managing your money effectively?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q21_confidence" id="q21_very" value="Very confident" class="option-input" required>
+                                    <label for="q21_very" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very confident — I have a good system</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q21_confidence" id="q21_somewhat" value="Somewhat confident" class="option-input">
+                                    <label for="q21_somewhat" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Somewhat confident — I manage okay but could improve</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q21_confidence" id="q21_not_very" value="Not very confident" class="option-input">
+                                    <label for="q21_not_very" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Not very confident — I often feel uncertain about my finances</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q21_confidence" id="q21_not_at_all" value="Not confident at all" class="option-input">
+                                    <label for="q21_not_at_all" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Not confident at all — I feel stressed about money regularly</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q22 -->
+                        <div class="question-group" data-question="22">
+                            <div class="question-header">
+                                <span class="question-number">22</span>
+                                <label class="question-label">Have you ever received any formal financial literacy training or education?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_school" value="School/University" class="option-input" required>
+                                    <label for="q22_school" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, through school or university</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_mcf" value="MCF/Scholarship" class="option-input">
+                                    <label for="q22_mcf" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, through MCF or another scholarship program</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_family" value="Family" class="option-input">
+                                    <label for="q22_family" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, through family</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_no_interested" value="No but interested" class="option-input">
+                                    <label for="q22_no_interested" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, but I'd be interested</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_no_not" value="No not interested" class="option-input">
+                                    <label for="q22_no_not" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, and I'm not particularly interested</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 6: Concept Validation -->
+                    <div class="survey-section" data-section="6">
+                        <div class="section-header">
+                            <div class="section-icon green">
+                                <i data-lucide="lightbulb"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Concept Validation</h2>
+                                <p>Help us understand what features would help you most</p>
+                            </div>
+                        </div>
+
+                        <!-- Q23 -->
+                        <div class="question-group" data-question="23">
+                            <div class="question-header">
+                                <span class="question-number">23</span>
+                                <label class="question-label">Imagine an app that automatically splits your stipend as soon as you receive it — putting a portion into savings you can't easily touch, and releasing the rest as a weekly budget. How appealing does this sound?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q23_appeal" id="q23_very" value="Very appealing" class="option-input" required>
+                                    <label for="q23_very" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very appealing — this would help me a lot</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q23_appeal" id="q23_somewhat" value="Somewhat appealing" class="option-input">
+                                    <label for="q23_somewhat" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Somewhat appealing — I'd consider trying it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q23_appeal" id="q23_neutral" value="Neutral" class="option-input">
+                                    <label for="q23_neutral" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Neutral — I'm not sure if I'd use it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q23_appeal" id="q23_not" value="Not appealing" class="option-input">
+                                    <label for="q23_not" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Not appealing — I prefer to manage my money myself</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q23_appeal" id="q23_not_at_all" value="Not appealing at all" class="option-input">
+                                    <label for="q23_not_at_all" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Not appealing at all — this sounds restrictive</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q24 -->
+                        <div class="question-group" data-question="24">
+                            <div class="question-header">
+                                <span class="question-number">24</span>
+                                <label class="question-label">If you could automatically save a percentage of your stipend before you even see it, what percentage would you be comfortable saving?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q24_percent" id="q24_5" value="5% or less" class="option-input" required>
+                                    <label for="q24_5" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>5% or less</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q24_percent" id="q24_10" value="10%" class="option-input">
+                                    <label for="q24_10" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>10%</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q24_percent" id="q24_15" value="15%" class="option-input">
+                                    <label for="q24_15" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>15%</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q24_percent" id="q24_20" value="20%" class="option-input">
+                                    <label for="q24_20" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>20%</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q24_percent" id="q24_more" value="More than 20%" class="option-input">
+                                    <label for="q24_more" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>More than 20%</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q24_percent" id="q24_no" value="No automatic savings" class="option-input">
+                                    <label for="q24_no" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I wouldn't want automatic savings</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q25 -->
+                        <div class="question-group" data-question="25">
+                            <div class="question-header">
+                                <span class="question-number">25</span>
+                                <label class="question-label">Which type of savings feature sounds more useful to you?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="info"></i>
+                                <span>Option A: "Flex-Save" — emergency savings with limited withdrawals. Option B: "Target-Save" — goal-based savings, locked until you reach the goal.</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q25_feature" id="q25_a" value="Option A" class="option-input" required>
+                                    <label for="q25_a" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Option A is more useful (Flex-Save)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q25_feature" id="q25_b" value="Option B" class="option-input">
+                                    <label for="q25_b" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Option B is more useful (Target-Save)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q25_feature" id="q25_both" value="Both" class="option-input">
+                                    <label for="q25_both" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Both are equally useful — I'd want both</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q25_feature" id="q25_neither" value="Neither" class="option-input">
+                                    <label for="q25_neither" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Neither appeals to me</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q26 -->
+                        <div class="question-group" data-question="26">
+                            <div class="question-header">
+                                <span class="question-number">26</span>
+                                <label class="question-label">If your savings could be invested in low-risk options (like government bonds) to earn 5-8% annually while you save, how interested would you be?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_very" value="Very interested" class="option-input" required>
+                                    <label for="q26_very" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very interested</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_somewhat" value="Somewhat interested" class="option-input">
+                                    <label for="q26_somewhat" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Somewhat interested</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_neutral" value="Neutral" class="option-input">
+                                    <label for="q26_neutral" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Neutral</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_not" value="Not interested" class="option-input">
+                                    <label for="q26_not" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Not interested — I prefer my savings to stay as cash</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_concerned" value="Concerned" class="option-input">
+                                    <label for="q26_concerned" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Concerned — I don't trust investments</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q27 -->
+                        <div class="question-group" data-question="27">
+                            <div class="question-header">
+                                <span class="question-number">27</span>
+                                <label class="question-label">How would you feel about receiving your stipend through an app that includes these budgeting and savings features?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q27_receive" id="q27_very_positive" value="Very positive" class="option-input" required>
+                                    <label for="q27_very_positive" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very positive — I'd welcome this</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q27_receive" id="q27_somewhat_positive" value="Somewhat positive" class="option-input">
+                                    <label for="q27_somewhat_positive" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Somewhat positive — I'd be open to trying it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q27_receive" id="q27_neutral" value="Neutral" class="option-input">
+                                    <label for="q27_neutral" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Neutral — I'd need to see how it works first</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q27_receive" id="q27_somewhat_negative" value="Somewhat negative" class="option-input">
+                                    <label for="q27_somewhat_negative" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Somewhat negative — I prefer receiving money directly</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q27_receive" id="q27_very_negative" value="Very negative" class="option-input">
+                                    <label for="q27_very_negative" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very negative — I want full control over my stipend immediately</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 7: Barriers & Trust -->
+                    <div class="survey-section" data-section="7">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i data-lucide="shield"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Barriers, Trust & Concerns</h2>
+                                <p>Understanding what matters most to you</p>
+                            </div>
+                        </div>
+
+                        <!-- Q28 -->
+                        <div class="question-group" data-question="28">
+                            <div class="question-header">
+                                <span class="question-number">28</span>
+                                <label class="question-label">What concerns, if any, would you have about using a student financial app to manage your stipend?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_security" value="Security" class="option-input">
+                                    <label for="q28_security" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Security of my money</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_privacy" value="Privacy" class="option-input">
+                                    <label for="q28_privacy" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Privacy of my financial data</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_reliability" value="Reliability" class="option-input">
+                                    <label for="q28_reliability" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Reliability — what if the app fails or has errors?</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_control" value="Losing control" class="option-input">
+                                    <label for="q28_control" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Losing flexibility or control over my money</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_fees" value="Hidden fees" class="option-input">
+                                    <label for="q28_fees" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Hidden fees</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_emergency" value="Emergency access" class="option-input">
+                                    <label for="q28_emergency" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Not being able to access my money in emergencies</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_none" value="No concerns" class="option-input">
+                                    <label for="q28_none" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't have any major concerns</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_other" value="Other" class="option-input">
+                                    <label for="q28_other" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q28_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q28_other_input">
+                        </div>
+
+                        <!-- Q29 -->
+                        <div class="question-group" data-question="29">
+                            <div class="question-header">
+                                <span class="question-number">29</span>
+                                <label class="question-label">What would make you trust a new financial app with your stipend?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select up to 3</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_endorsed" value="MCF/ALU endorsed" class="option-input" data-max="3">
+                                    <label for="q29_endorsed" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>It's officially endorsed by the Mastercard Foundation or ALU</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_bank" value="Backed by bank" class="option-input" data-max="3">
+                                    <label for="q29_bank" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>It's backed by a licensed, reputable bank</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_friends" value="Friends recommend" class="option-input" data-max="3">
+                                    <label for="q29_friends" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Friends or classmates recommend it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_test" value="Test first" class="option-input" data-max="3">
+                                    <label for="q29_test" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I can test it with a small amount before committing</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_transparent" value="Transparent terms" class="option-input" data-max="3">
+                                    <label for="q29_transparent" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Clear, transparent terms with no hidden fees</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_security" value="Strong security" class="option-input" data-max="3">
+                                    <label for="q29_security" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Strong security features (PIN, biometrics)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_support" value="Good support" class="option-input" data-max="3">
+                                    <label for="q29_support" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Responsive customer support</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 8: Open-Ended -->
+                    <div class="survey-section" data-section="8">
+                        <div class="section-header">
+                            <div class="section-icon orange">
+                                <i data-lucide="message-square"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Open-Ended Insights</h2>
+                                <p>Share your thoughts in your own words</p>
+                            </div>
+                        </div>
+
+                        <!-- Q30 -->
+                        <div class="question-group" data-question="30">
+                            <div class="question-header">
+                                <span class="question-number">30</span>
+                                <label class="question-label">In your own words, what is the single biggest financial challenge you face as a student on a monthly stipend?<span class="required-star">*</span></label>
+                            </div>
+                            <textarea name="q30_challenge" class="textarea-input" placeholder="Share your thoughts..." required></textarea>
+                        </div>
+
+                        <!-- Q31 -->
+                        <div class="question-group" data-question="31">
+                            <div class="question-header">
+                                <span class="question-number">31</span>
+                                <label class="question-label">If you could design the perfect financial tool for students like you, what ONE feature would it absolutely need to have?<span class="required-star">*</span></label>
+                            </div>
+                            <textarea name="q31_feature" class="textarea-input" placeholder="Describe your ideal feature..." required></textarea>
+                        </div>
+
+                        <!-- Q32 -->
+                        <div class="question-group" data-question="32">
+                            <div class="question-header">
+                                <span class="question-number">32</span>
+                                <label class="question-label">Is there anything else you'd like to share about how you manage your stipend or your financial life as a student?</label>
+                            </div>
+                            <textarea name="q32_additional" class="textarea-input" placeholder="Any additional thoughts... (optional)"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section 9: Follow-Up -->
+                    <div class="survey-section" data-section="9">
+                        <div class="section-header">
+                            <div class="section-icon green">
+                                <i data-lucide="user-plus"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Follow-Up Permission</h2>
+                                <p>Help us learn more through interviews</p>
+                            </div>
+                        </div>
+
+                        <!-- Q33 -->
+                        <div class="question-group" data-question="33">
+                            <div class="question-header">
+                                <span class="question-number">33</span>
+                                <label class="question-label">We may conduct follow-up interviews to understand student needs better. Would you be willing to participate in a 10-minute interview (with a small token of appreciation)?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q33_followup" id="q33_yes" value="Yes" class="option-input" required>
+                                    <label for="q33_yes" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, I'm willing to participate</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q33_followup" id="q33_no" value="No" class="option-input">
+                                    <label for="q33_no" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, thank you</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q34 -->
+                        <div class="question-group" data-question="34" id="q34_container" style="display: none;">
+                            <div class="question-header">
+                                <span class="question-number">34</span>
+                                <label class="question-label">Preferred contact method:</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="lock"></i>
+                                <span>Your contact information will only be used for interview scheduling</span>
+                            </div>
+                            <div style="margin-left: 40px; display: flex; flex-direction: column; gap: 16px;">
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: var(--gray-600); margin-bottom: 6px;">
+                                        <i data-lucide="mail" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                                        Email Address
+                                    </label>
+                                    <input type="email" name="q34_email" class="text-input" placeholder="your.email@example.com" style="margin-left: 0; width: 100%;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 13px; color: var(--gray-600); margin-bottom: 6px;">
+                                        <i data-lucide="phone" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                                        WhatsApp Number
+                                    </label>
+                                    <input type="tel" name="q34_whatsapp" class="text-input" placeholder="+250 7XX XXX XXX" style="margin-left: 0; width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="navigation">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" style="visibility: hidden;">
+                            <i data-lucide="arrow-left"></i>
+                            <span>Previous</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn">
+                            <span>Get Started</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Success Screen -->
+                <div class="success-screen" id="successScreen">
+                    <div class="success-icon">
+                        <i data-lucide="check"></i>
+                    </div>
+                    <h2 class="success-title">Thank You!</h2>
+                    <p class="success-message">
+                        Your response has been submitted successfully. Thank you for helping us understand how MCF scholars manage their stipends. Your insights will help shape better financial tools for students.
+                    </p>
+                    <div class="success-info">
+                        <div class="success-info-item">
+                            <i data-lucide="shield-check"></i>
+                            <span>Your responses are anonymous and secure</span>
+                        </div>
+                        <div class="success-info-item">
+                            <i data-lucide="gift"></i>
+                            <span>Winners will be contacted within 2 weeks</span>
+                        </div>
+                        <div class="success-info-item">
+                            <i data-lucide="mail"></i>
+                            <span>Questions? Contact research@silogrp.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Dots -->
+            <div class="section-dots" id="sectionDots">
+                <!-- Dots will be generated by JS -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2025 SiLo.Grp Research Initiative | In partnership with Mastercard Foundation</p>
+            <p style="margin-top: 8px;">
+                <a href="#" target="_blank">Privacy Policy</a> · <a href="#" target="_blank">Terms of Use</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Admin Link -->
+    <a href="admin.html" class="admin-link" id="adminLink">
+        <i data-lucide="settings"></i>
+        <span>Admin Panel</span>
+    </a>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Survey Application
+        const SurveyApp = {
+            currentSection: 0,
+            totalSections: 10, // Including welcome (0) and 9 content sections
+            responses: {},
+
+            init() {
+                this.generateDots();
+                this.bindEvents();
+                this.updateUI();
+                this.setupConditionalQuestions();
+                this.setupPercentageCalculation();
+                this.setupMaxSelections();
+            },
+
+            generateDots() {
+                const dotsContainer = document.getElementById('sectionDots');
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < this.totalSections; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'section-dot' + (i === 0 ? ' active' : '');
+                    dot.dataset.section = i;
+                    dot.addEventListener('click', () => this.goToSection(i));
+                    dotsContainer.appendChild(dot);
+                }
+            },
+
+            bindEvents() {
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextSection());
+                document.getElementById('prevBtn').addEventListener('click', () => this.prevSection());
+
+                // Show "Other" input fields when selected
+                document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                    input.addEventListener('change', (e) => this.handleOptionChange(e));
+                });
+            },
+
+            handleOptionChange(e) {
+                const input = e.target;
+                const name = input.name;
+                
+                // Handle "Other" option reveal
+                if (input.value === 'Other' || input.id.includes('_other')) {
+                    const otherInput = document.getElementById(input.id.replace('_other', '') + '_other_input') ||
+                                       document.getElementById(name.replace('[]', '') + '_other_input');
+                    if (otherInput) {
+                        otherInput.style.display = input.checked ? 'block' : 'none';
+                    }
+                }
+            },
+
+            setupConditionalQuestions() {
+                // Q17 -> Q18 (show Q18 if "Withdrew early" selected)
+                document.querySelectorAll('input[name="q17_goal"]').forEach(input => {
+                    input.addEventListener('change', () => {
+                        const q18 = document.getElementById('q18_container');
+                        q18.style.display = input.value === 'Withdrew early' && input.checked ? 'block' : 'none';
+                    });
+                });
+
+                // Q18 Other
+                document.getElementById('q18_other').addEventListener('change', (e) => {
+                    document.getElementById('q18_other_input').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // Q19 -> Q20 (show Q20 if "Tried and stopped" selected)
+                document.querySelectorAll('input[name="q19_tool"]').forEach(input => {
+                    input.addEventListener('change', () => {
+                        const q20 = document.getElementById('q20_container');
+                        const appInput = document.getElementById('q19_app_input');
+                        
+                        q20.style.display = input.value === 'Tried and stopped' && input.checked ? 'block' : 'none';
+                        appInput.style.display = input.value === 'Yes' && input.checked ? 'block' : 'none';
+                    });
+                });
+
+                // Q20 Other
+                document.getElementById('q20_other').addEventListener('change', (e) => {
+                    document.getElementById('q20_other_input').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // Q33 -> Q34 (show Q34 if "Yes" selected)
+                document.querySelectorAll('input[name="q33_followup"]').forEach(input => {
+                    input.addEventListener('change', () => {
+                        const q34 = document.getElementById('q34_container');
+                        q34.style.display = input.value === 'Yes' && input.checked ? 'block' : 'none';
+                    });
+                });
+
+                // Q5 Other
+                document.getElementById('q5_other').addEventListener('change', (e) => {
+                    document.getElementById('q5_other_input').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // Q8 Other
+                document.getElementById('q8_other').addEventListener('change', (e) => {
+                    document.getElementById('q8_other_input').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // Q15 App
+                document.getElementById('q15_app').addEventListener('change', (e) => {
+                    document.getElementById('q15_app_input').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // Q28 Other
+                document.getElementById('q28_other').addEventListener('change', (e) => {
+                    document.getElementById('q28_other_input').style.display = e.target.checked ? 'block' : 'none';
+                });
+            },
+
+            setupPercentageCalculation() {
+                const percentInputs = document.querySelectorAll('[data-percent]');
+                const totalDisplay = document.getElementById('percentageTotal');
+
+                percentInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        let total = 0;
+                        percentInputs.forEach(inp => {
+                            total += parseInt(inp.value) || 0;
+                        });
+                        totalDisplay.textContent = total + '%';
+                        totalDisplay.className = 'percentage-total-value ' + (total === 100 ? 'valid' : 'invalid');
+                    });
+                });
+            },
+
+            setupMaxSelections() {
+                // Q11 - max 2 selections
+                const q11Checkboxes = document.querySelectorAll('input[name="q11_hard[]"]');
+                q11Checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        const checked = document.querySelectorAll('input[name="q11_hard[]"]:checked').length;
+                        if (checked >= 2) {
+                            q11Checkboxes.forEach(c => {
+                                if (!c.checked) c.disabled = true;
+                            });
+                        } else {
+                            q11Checkboxes.forEach(c => c.disabled = false);
+                        }
+                    });
+                });
+
+                // Q29 - max 3 selections
+                const q29Checkboxes = document.querySelectorAll('input[name="q29_trust[]"]');
+                q29Checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        const checked = document.querySelectorAll('input[name="q29_trust[]"]:checked').length;
+                        if (checked >= 3) {
+                            q29Checkboxes.forEach(c => {
+                                if (!c.checked) c.disabled = true;
+                            });
+                        } else {
+                            q29Checkboxes.forEach(c => c.disabled = false);
+                        }
+                    });
+                });
+            },
+
+            nextSection() {
+                if (this.currentSection < this.totalSections - 1) {
+                    // Validate current section before moving forward
+                    if (this.currentSection > 0 && !this.validateSection(this.currentSection)) {
+                        this.showToast('Please complete all required fields', 'error');
+                        return;
+                    }
+                    
+                    this.currentSection++;
+                    this.updateUI();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // Final section - submit
+                    if (this.validateSection(this.currentSection)) {
+                        this.submitSurvey();
+                    } else {
+                        this.showToast('Please complete all required fields', 'error');
+                    }
+                }
+            },
+
+            prevSection() {
+                if (this.currentSection > 0) {
+                    this.currentSection--;
+                    this.updateUI();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            },
+
+            goToSection(section) {
+                // Only allow going back or to completed sections
+                if (section <= this.currentSection) {
+                    this.currentSection = section;
+                    this.updateUI();
+                }
+            },
+
+            validateSection(sectionIndex) {
+                const section = document.querySelector(`[data-section="${sectionIndex}"]`);
+                if (!section) return true;
+
+                const requiredInputs = section.querySelectorAll('[required]');
+                let isValid = true;
+
+                requiredInputs.forEach(input => {
+                    const questionGroup = input.closest('.question-group');
+                    
+                    if (input.type === 'radio') {
+                        const name = input.name;
+                        const checked = section.querySelector(`input[name="${name}"]:checked`);
+                        if (!checked) {
+                            isValid = false;
+                            if (questionGroup) questionGroup.classList.add('has-error');
+                        } else {
+                            if (questionGroup) questionGroup.classList.remove('has-error');
+                        }
+                    } else if (input.type === 'text' || input.tagName === 'TEXTAREA') {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            if (questionGroup) questionGroup.classList.add('has-error');
+                        } else {
+                            if (questionGroup) questionGroup.classList.remove('has-error');
+                        }
+                    }
+                });
+
+                return isValid;
+            },
+
+            updateUI() {
+                // Update sections visibility
+                document.querySelectorAll('.survey-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                const currentSectionEl = document.querySelector(`[data-section="${this.currentSection}"]`);
+                if (currentSectionEl) {
+                    currentSectionEl.classList.add('active');
+                }
+
+                // Update progress
+                const progress = (this.currentSection / (this.totalSections - 1)) * 100;
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('progressPercentage').textContent = Math.round(progress) + '%';
+                document.getElementById('currentSection').textContent = Math.max(1, this.currentSection);
+                document.getElementById('totalSections').textContent = this.totalSections - 1;
+
+                // Update dots
+                document.querySelectorAll('.section-dot').forEach((dot, index) => {
+                    dot.classList.remove('active', 'completed');
+                    if (index === this.currentSection) {
+                        dot.classList.add('active');
+                    } else if (index < this.currentSection) {
+                        dot.classList.add('completed');
+                    }
+                });
+
+                // Update buttons
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+
+                prevBtn.style.visibility = this.currentSection === 0 ? 'hidden' : 'visible';
+
+                if (this.currentSection === 0) {
+                    nextBtn.innerHTML = '<span>Get Started</span><i data-lucide="arrow-right"></i>';
+                    nextBtn.classList.remove('btn-submit');
+                } else if (this.currentSection === this.totalSections - 1) {
+                    nextBtn.innerHTML = '<i data-lucide="send"></i><span>Submit Survey</span>';
+                    nextBtn.classList.add('btn-submit');
+                } else {
+                    nextBtn.innerHTML = '<span>Continue</span><i data-lucide="arrow-right"></i>';
+                    nextBtn.classList.remove('btn-submit');
+                }
+
+                // Re-initialize Lucide icons
+                lucide.createIcons();
+            },
+
+            collectResponses() {
+                const form = document.getElementById('surveyForm');
+                const formData = new FormData(form);
+                const responses = {};
+
+                for (let [key, value] of formData.entries()) {
+                    if (key.includes('[]')) {
+                        const cleanKey = key.replace('[]', '');
+                        if (!responses[cleanKey]) {
+                            responses[cleanKey] = [];
+                        }
+                        responses[cleanKey].push(value);
+                    } else {
+                        responses[key] = value;
+                    }
+                }
+
+                // Convert arrays to comma-separated strings for storage
+                for (let key in responses) {
+                    if (Array.isArray(responses[key])) {
+                        responses[key] = responses[key].join(', ');
+                    }
+                }
+
+                responses.submitted_at = new Date().toISOString();
+                responses.id = 'response_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+                return responses;
+            },
+
+            async submitSurvey() {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.classList.add('active');
+
+                try {
+                    const responses = this.collectResponses();
+                    
+                    // Get existing responses from a simple in-memory store (for demo)
+                    // In production, this would be sent to Supabase or another backend
+                    let storedResponses = [];
+                    try {
+                        const stored = window.surveyResponses || [];
+                        storedResponses = Array.isArray(stored) ? stored : [];
+                    } catch (e) {
+                        storedResponses = [];
+                    }
+                    
+                    storedResponses.push(responses);
+                    window.surveyResponses = storedResponses;
+
+                    // Simulate network delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Show success
+                    document.getElementById('surveyForm').style.display = 'none';
+                    document.querySelector('.navigation').style.display = 'none';
+                    document.getElementById('successScreen').classList.add('active');
+                    document.getElementById('sectionDots').style.display = 'none';
+
+                    // Update progress to 100%
+                    document.getElementById('progressBar').style.width = '100%';
+                    document.getElementById('progressPercentage').textContent = '100%';
+
+                    this.showToast('Survey submitted successfully!', 'success');
+
+                } catch (error) {
+                    console.error('Error submitting survey:', error);
+                    this.showToast('Error submitting survey. Please try again.', 'error');
+                } finally {
+                    loadingOverlay.classList.remove('active');
+                }
+            },
+
+            showToast(message, type = 'success') {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
+                    <span class="toast-message">${message}</span>
+                `;
+                container.appendChild(toast);
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            }
+        };
+
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            SurveyApp.init();
+        });
+
+        // Initialize survey responses storage
+        window.surveyResponses = window.surveyResponses || [];
+    </script>
 </body>
 </html>

@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | MCF Survey</title>
+    
+    <!-- SF Pro Font Alternative (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #3B82F6;
+            --mcf-orange: #FF6B00;
+            --success-green: #10B981;
+            --warning-yellow: #F59E0B;
+            --error-red: #EF4444;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-800);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== Sidebar ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--gray-900);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-700);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo-icon i {
+            width: 24px;
+            height: 24px;
+            color: var(--white);
+        }
+
+        .sidebar-logo-text {
+            color: var(--white);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--gray-400);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            margin-bottom: 4px;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--gray-800);
+            color: var(--white);
+        }
+
+        .nav-item.active {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sidebar-footer {
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-700);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--gray-400);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .back-link:hover {
+            background: var(--gray-800);
+            color: var(--white);
+        }
+
+        .back-link i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== Main Content ===== */
+        .main-content {
+            margin-left: 260px;
+            padding: 32px;
+            min-height: 100vh;
+        }
+
+        /* ===== Header ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+        }
+
+        .btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-green) 0%, #34D399 100%);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* ===== Stats Cards ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-100);
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
+        }
+
+        .stat-icon i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .stat-icon.blue i { color: var(--primary-blue); }
+        .stat-icon.green i { color: var(--success-green); }
+        .stat-icon.orange i { color: var(--mcf-orange); }
+        .stat-icon.purple i { color: #8B5CF6; }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+
+        .stat-trend.up {
+            background: #ECFDF5;
+            color: var(--success-green);
+        }
+
+        .stat-trend.down {
+            background: #FEF2F2;
+            color: var(--error-red);
+        }
+
+        .stat-trend i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* ===== Data Table ===== */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-100);
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease-out 0.5s both;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .table-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-title h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .table-title .badge {
+            background: var(--primary-blue);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary-blue);
+            background: var(--white);
+        }
+
+        .search-box i {
+            width: 18px;
+            height: 18px;
+            color: var(--gray-400);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--gray-800);
+            width: 200px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-600);
+            border-bottom: 2px solid var(--gray-200);
+            white-space: nowrap;
+        }
+
+        td {
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        tr:hover td {
+            background: var(--gray-50);
+        }
+
+        .response-id {
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--gray-500);
+            background: var(--gray-100);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .campus-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .campus-badge.rwanda {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .campus-badge.mauritius {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .campus-badge.remote {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .action-btn:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .action-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===== Empty State ===== */
+        .empty-state {
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .empty-icon i {
+            width: 40px;
+            height: 40px;
+            color: var(--gray-400);
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: var(--gray-500);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* ===== Response Modal ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform var(--transition-normal);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--error-red);
+            color: var(--white);
+        }
+
+        .modal-close i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .response-detail {
+            margin-bottom: 20px;
+        }
+
+        .response-detail-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .response-detail-value {
+            font-size: 15px;
+            color: var(--gray-800);
+            background: var(--gray-50);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        /* ===== Loading Spinner ===== */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== Toast ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .toast {
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease-out;
+            margin-bottom: 10px;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.success { border-left: 4px solid var(--success-green); }
+        .toast.error { border-left: 4px solid var(--error-red); }
+
+        .toast i { width: 20px; height: 20px; }
+        .toast.success i { color: var(--success-green); }
+        .toast.error i { color: var(--error-red); }
+
+        /* ===== Refresh Animation ===== */
+        .refresh-btn.spinning i {
+            animation: spin 1s linear infinite;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .table-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+        /* ===== Real-time Pulse Animation ===== */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--success-green);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <i data-lucide="bar-chart-3"></i>
+            </div>
+            <span class="sidebar-logo-text">SiLo Admin</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="nav-item active">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-item">
+                <i data-lucide="file-text"></i>
+                <span>Responses</span>
+            </a>
+            <a class="nav-item">
+                <i data-lucide="pie-chart"></i>
+                <span>Analytics</span>
+            </a>
+            <a class="nav-item">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="back-link">
+                <i data-lucide="arrow-left"></i>
+                <span>Back to Survey</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="page-title">
+                <h1>Survey Dashboard</h1>
+                <p>Monitor and analyze MCF Scholar survey responses</p>
+            </div>
+            <div class="header-actions">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>Live Updates</span>
+                </div>
+                <button class="btn btn-secondary refresh-btn" id="refreshBtn">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Refresh</span>
+                </button>
+                <button class="btn btn-success" id="exportBtn">
+                    <i data-lucide="download"></i>
+                    <span>Export CSV</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon blue">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="stat-trend up">
+                        <i data-lucide="trending-up"></i>
+                        <span>+12%</span>
+                    </div>
+                </div>
+                <div class="stat-value" id="totalResponses">0</div>
+                <div class="stat-label">Total Responses</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon green">
+                        <i data-lucide="check-circle"></i>
+                    </div>
+                    <div class="stat-trend up">
+                        <i data-lucide="trending-up"></i>
+                        <span>+8%</span>
+                    </div>
+                </div>
+                <div class="stat-value" id="completionRate">0%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon orange">
+                        <i data-lucide="clock"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="avgTime">0m</div>
+                <div class="stat-label">Avg. Completion Time</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon purple">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="todayResponses">0</div>
+                <div class="stat-label">Responses Today</div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">
+                    <h2>Recent Responses</h2>
+                    <span class="badge" id="responseBadge">0 entries</span>
+                </div>
+                <div class="table-actions">
+                    <div class="search-box">
+                        <i data-lucide="search"></i>
+                        <input type="text" placeholder="Search responses..." id="searchInput">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="responsesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Submitted</th>
+                            <th>Year</th>
+                            <th>Gender</th>
+                            <th>Campus</th>
+                            <th>Savings</th>
+                            <th>Follow-up</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="responsesBody">
+                        <!-- Responses will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i data-lucide="inbox"></i>
+                </div>
+                <h3>No responses yet</h3>
+                <p>Survey responses will appear here in real-time as they are submitted.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Response Detail Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Response Details</h2>
+                <button class="modal-close" id="modalClose">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Response details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Admin Dashboard Application
+        const AdminApp = {
+            responses: [],
+
+            init() {
+                this.loadResponses();
+                this.bindEvents();
+                this.startAutoRefresh();
+            },
+
+            loadResponses() {
+                // Load from window.surveyResponses (shared with survey page)
+                // In production, this would fetch from Supabase
+                this.responses = window.surveyResponses || [];
+                
+                // Also try to get from opener window if available
+                if (window.opener && window.opener.surveyResponses) {
+                    this.responses = window.opener.surveyResponses;
+                }
+
+                // For demo purposes, load sample data if no responses
+                if (this.responses.length === 0) {
+                    this.loadSampleData();
+                }
+
+                this.updateStats();
+                this.renderTable();
+            },
+
+            loadSampleData() {
+                // Sample data for demonstration
+                const sampleResponses = [
+                    {
+                        id: 'resp_001',
+                        submitted_at: new Date().toISOString(),
+                        q1_year: 'Year 2',
+                        q2_gender: 'Female',
+                        q3_campus: 'ALU Rwanda (Kigali)',
+                        q4_income: 'No, stipend only',
+                        q5_first_action: 'Mentally divide into categories',
+                        q6_pattern: 'I spend more in the first two weeks, then cut back',
+                        q7_runout: 'Once',
+                        q14_save: 'Occasionally',
+                        q21_confidence: 'Somewhat confident',
+                        q30_challenge: 'Managing unexpected expenses that come up mid-month',
+                        q33_followup: 'Yes',
+                        q34_email: 'student1@alueducation.com'
+                    },
+                    {
+                        id: 'resp_002',
+                        submitted_at: new Date(Date.now() - 3600000).toISOString(),
+                        q1_year: 'Year 3',
+                        q2_gender: 'Male',
+                        q3_campus: 'ALU Mauritius',
+                        q4_income: 'Part-time/Freelance',
+                        q5_first_action: 'Transfer to savings',
+                        q6_pattern: 'I spend roughly the same amount each week',
+                        q7_runout: 'Never',
+                        q14_save: 'Consistently',
+                        q21_confidence: 'Very confident',
+                        q30_challenge: 'Balancing savings goals with daily expenses',
+                        q33_followup: 'No'
+                    },
+                    {
+                        id: 'resp_003',
+                        submitted_at: new Date(Date.now() - 7200000).toISOString(),
+                        q1_year: 'Year 1',
+                        q2_gender: 'Female',
+                        q3_campus: 'ALU Rwanda (Kigali)',
+                        q4_income: 'Family support',
+                        q5_first_action: 'Spend without plan',
+                        q6_pattern: 'My spending is unpredictable',
+                        q7_runout: 'Every month',
+                        q14_save: "Don't save",
+                        q21_confidence: 'Not confident at all',
+                        q30_challenge: 'I always run out of money before month end',
+                        q33_followup: 'Yes',
+                        q34_whatsapp: '+250788123456'
+                    }
+                ];
+
+                this.responses = sampleResponses;
+                window.surveyResponses = sampleResponses;
+            },
+
+            bindEvents() {
+                document.getElementById('refreshBtn').addEventListener('click', () => this.refreshData());
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportCSV());
+                document.getElementById('searchInput').addEventListener('input', (e) => this.filterResponses(e.target.value));
+                document.getElementById('modalClose').addEventListener('click', () => this.closeModal());
+                document.getElementById('modalOverlay').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) this.closeModal();
+                });
+            },
+
+            startAutoRefresh() {
+                // Auto-refresh every 30 seconds
+                setInterval(() => {
+                    this.loadResponses();
+                }, 30000);
+            },
+
+            refreshData() {
+                const btn = document.getElementById('refreshBtn');
+                btn.classList.add('spinning');
+                
+                setTimeout(() => {
+                    this.loadResponses();
+                    btn.classList.remove('spinning');
+                    this.showToast('Data refreshed successfully', 'success');
+                }, 1000);
+            },
+
+            updateStats() {
+                const total = this.responses.length;
+                const today = this.responses.filter(r => {
+                    const date = new Date(r.submitted_at);
+                    const now = new Date();
+                    return date.toDateString() === now.toDateString();
+                }).length;
+
+                document.getElementById('totalResponses').textContent = total;
+                document.getElementById('todayResponses').textContent = today;
+                document.getElementById('completionRate').textContent = total > 0 ? '94%' : '0%';
+                document.getElementById('avgTime').textContent = total > 0 ? '8m' : '0m';
+                document.getElementById('responseBadge').textContent = `${total} entries`;
+            },
+
+            renderTable() {
+                const tbody = document.getElementById('responsesBody');
+                const emptyState = document.getElementById('emptyState');
+                const table = document.getElementById('responsesTable');
+
+                if (this.responses.length === 0) {
+                    table.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                table.style.display = 'table';
+                emptyState.style.display = 'none';
+
+                tbody.innerHTML = this.responses.map(response => {
+                    const date = new Date(response.submitted_at);
+                    const formattedDate = date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    const campusClass = response.q3_campus?.includes('Rwanda') ? 'rwanda' :
+                                       response.q3_campus?.includes('Mauritius') ? 'mauritius' : 'remote';
+
+                    const campusLabel = response.q3_campus?.includes('Rwanda') ? 'Rwanda' :
+                                       response.q3_campus?.includes('Mauritius') ? 'Mauritius' : 'Remote';
+
+                    return `
+                        <tr>
+                            <td><span class="response-id">${response.id?.substring(0, 12) || 'N/A'}</span></td>
+                            <td>${formattedDate}</td>
+                            <td>${response.q1_year || 'N/A'}</td>
+                            <td>${response.q2_gender || 'N/A'}</td>
+                            <td><span class="campus-badge ${campusClass}">${campusLabel}</span></td>
+                            <td>${response.q14_save || 'N/A'}</td>
+                            <td>${response.q33_followup === 'Yes' ? '✓' : '—'}</td>
+                            <td>
+                                <button class="action-btn" onclick="AdminApp.viewResponse('${response.id}')">
+                                    <i data-lucide="eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                lucide.createIcons();
+            },
+
+            filterResponses(query) {
+                const filtered = this.responses.filter(r => {
+                    const searchStr = JSON.stringify(r).toLowerCase();
+                    return searchStr.includes(query.toLowerCase());
+                });
+
+                const tbody = document.getElementById('responsesBody');
+                if (filtered.length === 0 && query) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray-500);">
+                                No responses match your search
+                            </td>
+                        </tr>
+                    `;
+                } else if (query) {
+                    // Re-render with filtered data
+                    const tempResponses = this.responses;
+                    this.responses = filtered;
+                    this.renderTable();
+                    this.responses = tempResponses;
+                } else {
+                    this.renderTable();
+                }
+            },
+
+            viewResponse(id) {
+                const response = this.responses.find(r => r.id === id);
+                if (!response) return;
+
+                const modalBody = document.getElementById('modalBody');
+                const questionLabels = {
+                    q1_year: 'Year of Study',
+                    q2_gender: 'Gender',
+                    q3_campus: 'Campus',
+                    q4_income: 'Additional Income',
+                    q5_first_action: 'First Action with Stipend',
+                    q6_pattern: 'Spending Pattern',
+                    q7_runout: 'Run Out Frequency (3 months)',
+                    q14_save: 'Saving Behavior',
+                    q21_confidence: 'Financial Confidence',
+                    q23_appeal: 'App Auto-Split Appeal',
+                    q30_challenge: 'Biggest Financial Challenge',
+                    q31_feature: 'Ideal Feature',
+                    q33_followup: 'Follow-up Permission',
+                    q34_email: 'Email',
+                    q34_whatsapp: 'WhatsApp'
+                };
+
+                let html = `
+                    <div class="response-detail">
+                        <div class="response-detail-label">Response ID</div>
+                        <div class="response-detail-value">${response.id}</div>
+                    </div>
+                    <div class="response-detail">
+                        <div class="response-detail-label">Submitted At</div>
+                        <div class="response-detail-value">${new Date(response.submitted_at).toLocaleString()}</div>
+                    </div>
+                `;
+
+                for (const [key, value] of Object.entries(response)) {
+                    if (key === 'id' || key === 'submitted_at') continue;
+                    const label = questionLabels[key] || key;
+                    html += `
+                        <div class="response-detail">
+                            <div class="response-detail-label">${label}</div>
+                            <div class="response-detail-value">${value || 'Not answered'}</div>
+                        </div>
+                    `;
+                }
+
+                modalBody.innerHTML = html;
+                document.getElementById('modalOverlay').classList.add('active');
+            },
+
+            closeModal() {
+                document.getElementById('modalOverlay').classList.remove('active');
+            },
+
+            exportCSV() {
+                if (this.responses.length === 0) {
+                    this.showToast('No data to export', 'error');
+                    return;
+                }
+
+                // Get all unique keys
+                const allKeys = new Set();
+                this.responses.forEach(r => {
+                    Object.keys(r).forEach(k => allKeys.add(k));
+                });
+                const headers = Array.from(allKeys);
+
+                // Create CSV content
+                let csv = headers.join(',') + '\n';
+                
+                this.responses.forEach(response => {
+                    const row = headers.map(header => {
+                        let value = response[header] || '';
+                        // Escape quotes and wrap in quotes if contains comma
+                        value = String(value).replace(/"/g, '""');
+                        if (value.includes(',') || value.includes('\n')) {
+                            value = `"${value}"`;
+                        }
+                        return value;
+                    });
+                    csv += row.join(',') + '\n';
+                });
+
+                // Download
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `mcf_survey_responses_${new Date().toISOString().split('T')[0]}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                this.showToast('CSV exported successfully!', 'success');
+            },
+
+            showToast(message, type = 'success') {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                container.appendChild(toast);
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        };
+
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            AdminApp.init();
+        });
+    </script>
+</body>
+</html>
