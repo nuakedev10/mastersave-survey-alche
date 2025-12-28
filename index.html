@@ -2960,460 +2960,445 @@
     <!-- REMOVED: Admin Link button - students don't need to see this -->
 
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+    // Initialize Lucide icons
+    lucide.createIcons();
 
-        // Survey Application
-        const SurveyApp = {
-            currentSection: 0,
-            totalSections: 10, // Including welcome (0) and 9 content sections
-            responses: {},
+    // Survey Application
+    const SurveyApp = {
+        currentSection: 0,
+        totalSections: 10,
+        responses: {},
 
-            init() {
-                this.generateDots();
-                this.bindEvents();
-                this.updateUI();
-                this.setupConditionalQuestions();
-                this.setupPercentageCalculation();
-                this.setupMaxSelections();
-            },
+        init() {
+            this.generateDots();
+            this.bindEvents();
+            this.updateUI();
+            this.setupConditionalQuestions();
+            this.setupPercentageCalculation();
+            this.setupMaxSelections();
+        },
 
-            generateDots() {
-                const dotsContainer = document.getElementById('sectionDots');
-                dotsContainer.innerHTML = '';
-                for (let i = 0; i < this.totalSections; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'section-dot' + (i === 0 ? ' active' : '');
-                    dot.dataset.section = i;
-                    dot.addEventListener('click', () => this.goToSection(i));
-                    dotsContainer.appendChild(dot);
+        generateDots() {
+            const dotsContainer = document.getElementById('sectionDots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < this.totalSections; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'section-dot' + (i === 0 ? ' active' : '');
+                dot.dataset.section = i;
+                dot.addEventListener('click', () => this.goToSection(i));
+                dotsContainer.appendChild(dot);
+            }
+        },
+
+        bindEvents() {
+            document.getElementById('nextBtn').addEventListener('click', () => this.nextSection());
+            document.getElementById('prevBtn').addEventListener('click', () => this.prevSection());
+
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                input.addEventListener('change', (e) => this.handleOptionChange(e));
+            });
+        },
+
+        handleOptionChange(e) {
+            const input = e.target;
+            const name = input.name;
+            
+            if (input.value === 'Other' || input.id.includes('_other')) {
+                const otherInput = document.getElementById(input.id.replace('_other', '') + '_other_input') ||
+                                   document.getElementById(name.replace('[]', '') + '_other_input');
+                if (otherInput) {
+                    otherInput.style.display = input.checked ? 'block' : 'none';
                 }
-            },
+            }
+        },
 
-            bindEvents() {
-                document.getElementById('nextBtn').addEventListener('click', () => this.nextSection());
-                document.getElementById('prevBtn').addEventListener('click', () => this.prevSection());
-
-                // Show "Other" input fields when selected
-                document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
-                    input.addEventListener('change', (e) => this.handleOptionChange(e));
+        setupConditionalQuestions() {
+            // Q17 -> Q18
+            document.querySelectorAll('input[name="q17_goal"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    const q18 = document.getElementById('q18_container');
+                    q18.style.display = input.value === 'Withdrew early' && input.checked ? 'block' : 'none';
                 });
-            },
+            });
 
-            handleOptionChange(e) {
-                const input = e.target;
-                const name = input.name;
-                
-                // Handle "Other" option reveal
-                if (input.value === 'Other' || input.id.includes('_other')) {
-                    const otherInput = document.getElementById(input.id.replace('_other', '') + '_other_input') ||
-                                       document.getElementById(name.replace('[]', '') + '_other_input');
-                    if (otherInput) {
-                        otherInput.style.display = input.checked ? 'block' : 'none';
-                    }
-                }
-            },
-
-            setupConditionalQuestions() {
-                // Q17 -> Q18 (show Q18 if "Withdrew early" selected)
-                document.querySelectorAll('input[name="q17_goal"]').forEach(input => {
-                    input.addEventListener('change', () => {
-                        const q18 = document.getElementById('q18_container');
-                        q18.style.display = input.value === 'Withdrew early' && input.checked ? 'block' : 'none';
-                    });
-                });
-
-                // Q18 Other
-                document.getElementById('q18_other').addEventListener('change', (e) => {
+            // Q18 Other
+            const q18Other = document.getElementById('q18_other');
+            if (q18Other) {
+                q18Other.addEventListener('change', (e) => {
                     document.getElementById('q18_other_input').style.display = e.target.checked ? 'block' : 'none';
                 });
+            }
 
-                // Q19 -> Q20 (show Q20 if "Tried and stopped" selected)
-                document.querySelectorAll('input[name="q19_tool"]').forEach(input => {
-                    input.addEventListener('change', () => {
-                        const q20 = document.getElementById('q20_container');
-                        const appInput = document.getElementById('q19_app_input');
-                        
-                        q20.style.display = input.value === 'Tried and stopped' && input.checked ? 'block' : 'none';
-                        appInput.style.display = input.value === 'Yes' && input.checked ? 'block' : 'none';
-                    });
+            // Q19 -> Q20
+            document.querySelectorAll('input[name="q19_tool"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    const q20 = document.getElementById('q20_container');
+                    const appInput = document.getElementById('q19_app_input');
+                    
+                    q20.style.display = input.value === 'Tried and stopped' && input.checked ? 'block' : 'none';
+                    appInput.style.display = input.value === 'Yes' && input.checked ? 'block' : 'none';
                 });
+            });
 
-                // Q20 Other
-                document.getElementById('q20_other').addEventListener('change', (e) => {
+            // Q20 Other
+            const q20Other = document.getElementById('q20_other');
+            if (q20Other) {
+                q20Other.addEventListener('change', (e) => {
                     document.getElementById('q20_other_input').style.display = e.target.checked ? 'block' : 'none';
                 });
+            }
 
-                // Q33 -> Q34 (show Q34 if "Yes" selected)
-                document.querySelectorAll('input[name="q33_followup"]').forEach(input => {
-                    input.addEventListener('change', () => {
-                        const q34 = document.getElementById('q34_container');
-                        q34.style.display = input.value === 'Yes' && input.checked ? 'block' : 'none';
-                    });
+            // Q33 -> Q34
+            document.querySelectorAll('input[name="q33_followup"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    const q34 = document.getElementById('q34_container');
+                    q34.style.display = input.value === 'Yes' && input.checked ? 'block' : 'none';
                 });
+            });
 
-                // Q5 Other
-                document.getElementById('q5_other').addEventListener('change', (e) => {
+            // Q5 Other
+            const q5Other = document.getElementById('q5_other');
+            if (q5Other) {
+                q5Other.addEventListener('change', (e) => {
                     document.getElementById('q5_other_input').style.display = e.target.checked ? 'block' : 'none';
                 });
+            }
 
-                // Q8 Other
-                document.getElementById('q8_other').addEventListener('change', (e) => {
+            // Q8 Other
+            const q8Other = document.getElementById('q8_other');
+            if (q8Other) {
+                q8Other.addEventListener('change', (e) => {
                     document.getElementById('q8_other_input').style.display = e.target.checked ? 'block' : 'none';
                 });
+            }
 
-                // Q15 App
-                document.getElementById('q15_app').addEventListener('change', (e) => {
+            // Q15 App
+            const q15App = document.getElementById('q15_app');
+            if (q15App) {
+                q15App.addEventListener('change', (e) => {
                     document.getElementById('q15_app_input').style.display = e.target.checked ? 'block' : 'none';
                 });
+            }
 
-                // Q28 Other
-                document.getElementById('q28_other').addEventListener('change', (e) => {
+            // Q28 Other
+            const q28Other = document.getElementById('q28_other');
+            if (q28Other) {
+                q28Other.addEventListener('change', (e) => {
                     document.getElementById('q28_other_input').style.display = e.target.checked ? 'block' : 'none';
                 });
-            },
-
-            setupPercentageCalculation() {
-                const percentInputs = document.querySelectorAll('[data-percent]');
-                const totalDisplay = document.getElementById('percentageTotal');
-
-                percentInputs.forEach(input => {
-                    input.addEventListener('input', () => {
-                        let total = 0;
-                        percentInputs.forEach(inp => {
-                            total += parseInt(inp.value) || 0;
-                        });
-                        totalDisplay.textContent = total + '%';
-                        totalDisplay.className = 'percentage-total-value ' + (total === 100 ? 'valid' : 'invalid');
-                    });
-                });
-            },
-
-            setupMaxSelections() {
-                // Q11 - max 2 selections
-                const q11Checkboxes = document.querySelectorAll('input[name="q11_hard[]"]');
-                q11Checkboxes.forEach(cb => {
-                    cb.addEventListener('change', () => {
-                        const checked = document.querySelectorAll('input[name="q11_hard[]"]:checked').length;
-                        if (checked >= 2) {
-                            q11Checkboxes.forEach(c => {
-                                if (!c.checked) c.disabled = true;
-                            });
-                        } else {
-                            q11Checkboxes.forEach(c => c.disabled = false);
-                        }
-                    });
-                });
-
-                // Q29 - max 3 selections
-                const q29Checkboxes = document.querySelectorAll('input[name="q29_trust[]"]');
-                q29Checkboxes.forEach(cb => {
-                    cb.addEventListener('change', () => {
-                        const checked = document.querySelectorAll('input[name="q29_trust[]"]:checked').length;
-                        if (checked >= 3) {
-                            q29Checkboxes.forEach(c => {
-                                if (!c.checked) c.disabled = true;
-                            });
-                        } else {
-                            q29Checkboxes.forEach(c => c.disabled = false);
-                        }
-                    });
-                });
-            },
-
-            nextSection() {
-                if (this.currentSection < this.totalSections - 1) {
-                    // Validate current section before moving forward
-                    if (this.currentSection > 0 && !this.validateSection(this.currentSection)) {
-                        this.showToast('Please complete all required fields', 'error');
-                        return;
-                    }
-                    
-                    this.currentSection++;
-                    this.updateUI();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    // Final section - submit
-                    if (this.validateSection(this.currentSection)) {
-                        this.submitSurvey();
-                    } else {
-                        this.showToast('Please complete all required fields', 'error');
-                    }
-                }
-            },
-
-            prevSection() {
-                if (this.currentSection > 0) {
-                    this.currentSection--;
-                    this.updateUI();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            },
-
-            goToSection(section) {
-                // Only allow going back or to completed sections
-                if (section <= this.currentSection) {
-                    this.currentSection = section;
-                    this.updateUI();
-                }
-            },
-
-            validateSection(sectionIndex) {
-                const section = document.querySelector(`[data-section="${sectionIndex}"]`);
-                if (!section) return true;
-
-                const requiredInputs = section.querySelectorAll('[required]');
-                let isValid = true;
-
-                requiredInputs.forEach(input => {
-                    const questionGroup = input.closest('.question-group');
-                    
-                    if (input.type === 'radio') {
-                        const name = input.name;
-                        const checked = section.querySelector(`input[name="${name}"]:checked`);
-                        if (!checked) {
-                            isValid = false;
-                            if (questionGroup) questionGroup.classList.add('has-error');
-                        } else {
-                            if (questionGroup) questionGroup.classList.remove('has-error');
-                        }
-                    } else if (input.type === 'text' || input.tagName === 'TEXTAREA') {
-                        if (!input.value.trim()) {
-                            isValid = false;
-                            if (questionGroup) questionGroup.classList.add('has-error');
-                        } else {
-                            if (questionGroup) questionGroup.classList.remove('has-error');
-                        }
-                    }
-                });
-
-                return isValid;
-            },
-
-            updateUI() {
-                // Update sections visibility
-                document.querySelectorAll('.survey-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                const currentSectionEl = document.querySelector(`[data-section="${this.currentSection}"]`);
-                if (currentSectionEl) {
-                    currentSectionEl.classList.add('active');
-                }
-
-                // Update progress
-                const progress = (this.currentSection / (this.totalSections - 1)) * 100;
-                document.getElementById('progressBar').style.width = progress + '%';
-                document.getElementById('progressPercentage').textContent = Math.round(progress) + '%';
-                document.getElementById('currentSection').textContent = Math.max(1, this.currentSection);
-                document.getElementById('totalSections').textContent = this.totalSections - 1;
-
-                // Update dots
-                document.querySelectorAll('.section-dot').forEach((dot, index) => {
-                    dot.classList.remove('active', 'completed');
-                    if (index === this.currentSection) {
-                        dot.classList.add('active');
-                    } else if (index < this.currentSection) {
-                        dot.classList.add('completed');
-                    }
-                });
-
-                // Update buttons
-                const prevBtn = document.getElementById('prevBtn');
-                const nextBtn = document.getElementById('nextBtn');
-
-                prevBtn.style.visibility = this.currentSection === 0 ? 'hidden' : 'visible';
-
-                if (this.currentSection === 0) {
-                    nextBtn.innerHTML = '<span>Get Started</span><i data-lucide="arrow-right"></i>';
-                    nextBtn.classList.remove('btn-submit');
-                } else if (this.currentSection === this.totalSections - 1) {
-                    nextBtn.innerHTML = '<i data-lucide="send"></i><span>Submit Survey</span>';
-                    nextBtn.classList.add('btn-submit');
-                } else {
-                    nextBtn.innerHTML = '<span>Continue</span><i data-lucide="arrow-right"></i>';
-                    nextBtn.classList.remove('btn-submit');
-                }
-
-                // Re-initialize Lucide icons
-                lucide.createIcons();
-            },
-
-            collectResponses() {
-                const form = document.getElementById('surveyForm');
-                const formData = new FormData(form);
-                const responses = {};
-
-                for (let [key, value] of formData.entries()) {
-                    if (key.includes('[]')) {
-                        const cleanKey = key.replace('[]', '');
-                        if (!responses[cleanKey]) {
-                            responses[cleanKey] = [];
-                        }
-                        responses[cleanKey].push(value);
-                    } else {
-                        responses[key] = value;
-                    }
-                }
-
-                // Convert arrays to comma-separated strings for storage
-                for (let key in responses) {
-                    if (Array.isArray(responses[key])) {
-                        responses[key] = responses[key].join(', ');
-                    }
-                }
-
-                responses.submitted_at = new Date().toISOString();
-                responses.id = 'response_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-
-                return responses;
-            },
-
-            async submitSurvey() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    loadingOverlay.classList.add('active');
-
-    try {
-        const responses = this.collectResponses();
-        
-        // ========== SUPABASE CONFIGURATION ==========
-        // Replace these with your actual Supabase credentials
-        const SUPABASE_URL = 'https://lyemvikuxyoinjmqouhv.supabase.co/';  // e.g., https://abc123.supabase.co
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZW12aWt1eHlvaW5qbXFvdWh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3OTc3MzAsImV4cCI6MjA4MjM3MzczMH0.y23G0JTji4J3rT3CgAbdN-ufAmGhUrgBZMCXRvK6Tp0'; // Your anon/public key
-        // ============================================
-        
-        // Prepare data for Supabase (convert to proper format)
-        const surveyData = {
-            q1_year: responses.q1_year || null,
-            q2_gender: responses.q2_gender || null,
-            q3_campus: responses.q3_campus || null,
-            q4_income: responses.q4_income || null,
-            q5_first_action: responses.q5_first_action || null,
-            q5_other_specify: responses.q5_other_specify || null,
-            q6_pattern: responses.q6_pattern || null,
-            q7_runout: responses.q7_runout || null,
-            q8_short: responses.q8_short || null,
-            q9_loan: responses.q9_loan || null,
-            q10_accommodation: parseInt(responses.q10_accommodation) || 0,
-            q10_food: parseInt(responses.q10_food) || 0,
-            q10_transport: parseInt(responses.q10_transport) || 0,
-            q10_airtime: parseInt(responses.q10_airtime) || 0,
-            q10_personal: parseInt(responses.q10_personal) || 0,
-            q10_entertainment: parseInt(responses.q10_entertainment) || 0,
-            q10_savings: parseInt(responses.q10_savings) || 0,
-            q10_family: parseInt(responses.q10_family) || 0,
-            q10_other: parseInt(responses.q10_other) || 0,
-            q11_hard: responses.q11_hard || null,
-            q12_regret: responses.q12_regret || null,
-            q13_trigger: responses.q13_trigger ? (Array.isArray(responses.q13_trigger) ? responses.q13_trigger : [responses.q13_trigger]) : [],
-            q14_save: responses.q14_save || null,
-            q15_where: responses.q15_where ? (Array.isArray(responses.q15_where) ? responses.q15_where : [responses.q15_where]) : [],
-            q16_barrier: responses.q16_barrier || null,
-            q17_goal: responses.q17_goal || null,
-            q18_withdraw: responses.q18_withdraw || null,
-            q19_tool: responses.q19_tool || null,
-            q20_why_stopped: responses.q20_why_stopped || null,
-            q21_confidence: responses.q21_confidence || null,
-            q22_training: responses.q22_training || null,
-            q23_appeal: responses.q23_appeal || null,
-            q24_percent: responses.q24_percent || null,
-            q25_feature: responses.q25_feature || null,
-            q26_invest: responses.q26_invest || null,
-            q27_receive: responses.q27_receive || null,
-            q28_concerns: responses.q28_concerns ? (Array.isArray(responses.q28_concerns) ? responses.q28_concerns : [responses.q28_concerns]) : [],
-            q29_trust: responses.q29_trust ? (Array.isArray(responses.q29_trust) ? responses.q29_trust : [responses.q29_trust]) : [],
-            q30_challenge: responses.q30_challenge || null,
-            q31_feature: responses.q31_feature || null,
-            q32_additional: responses.q32_additional || null,
-            q33_followup: responses.q33_followup || null,
-            q34_email: responses.q34_email || null,
-            q34_whatsapp: responses.q34_whatsapp || null
-        };
-
-        // Submit to Supabase
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/survey_responses`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify(surveyData)
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Supabase error:', errorText);
-            throw new Error('Failed to submit survey');
-        }
-
-        console.log('Survey submitted successfully to Supabase!');
-
-        // Show success screen
-        document.getElementById('surveyForm').style.display = 'none';
-        document.querySelector('.navigation').style.display = 'none';
-        document.getElementById('successScreen').classList.add('active');
-        document.getElementById('sectionDots').style.display = 'none';
-
-        // Update progress to 100%
-        document.getElementById('progressBar').style.width = '100%';
-        document.getElementById('progressPercentage').textContent = '100%';
-
-        this.showToast('Survey submitted successfully!', 'success');
-
-    } catch (error) {
-        console.error('Error submitting survey:', error);
-        this.showToast('Error submitting survey. Please try again.', 'error');
-    } finally {
-        loadingOverlay.classList.remove('active');
-    }
-}
-
-                    // Simulate network delay
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-
-                    // Show success
-                    document.getElementById('surveyForm').style.display = 'none';
-                    document.querySelector('.navigation').style.display = 'none';
-                    document.getElementById('successScreen').classList.add('active');
-                    document.getElementById('sectionDots').style.display = 'none';
-
-                    // Update progress to 100%
-                    document.getElementById('progressBar').style.width = '100%';
-                    document.getElementById('progressPercentage').textContent = '100%';
-
-                    this.showToast('Survey submitted successfully!', 'success');
-
-                } catch (error) {
-                    console.error('Error submitting survey:', error);
-                    this.showToast('Error submitting survey. Please try again.', 'error');
-                } finally {
-                    loadingOverlay.classList.remove('active');
-                }
-            },
-
-            showToast(message, type = 'success') {
-                const container = document.getElementById('toastContainer');
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `
-                    <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
-                    <span class="toast-message">${message}</span>
-                `;
-                container.appendChild(toast);
-                lucide.createIcons();
-
-                setTimeout(() => {
-                    toast.style.animation = 'slideInRight 0.3s ease-out reverse';
-                    setTimeout(() => toast.remove(), 300);
-                }, 4000);
             }
-        };
+        },
 
-        // Initialize on DOM ready
-        document.addEventListener('DOMContentLoaded', () => {
-            SurveyApp.init();
-        });
-    </script>
+        setupPercentageCalculation() {
+            const percentInputs = document.querySelectorAll('[data-percent]');
+            const totalDisplay = document.getElementById('percentageTotal');
+
+            percentInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    let total = 0;
+                    percentInputs.forEach(inp => {
+                        total += parseInt(inp.value) || 0;
+                    });
+                    totalDisplay.textContent = total + '%';
+                    totalDisplay.className = 'percentage-total-value ' + (total === 100 ? 'valid' : 'invalid');
+                });
+            });
+        },
+
+        setupMaxSelections() {
+            // Q11 - max 2 selections
+            const q11Checkboxes = document.querySelectorAll('input[name="q11_hard[]"]');
+            q11Checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const checked = document.querySelectorAll('input[name="q11_hard[]"]:checked').length;
+                    if (checked >= 2) {
+                        q11Checkboxes.forEach(c => {
+                            if (!c.checked) c.disabled = true;
+                        });
+                    } else {
+                        q11Checkboxes.forEach(c => c.disabled = false);
+                    }
+                });
+            });
+
+            // Q29 - max 3 selections
+            const q29Checkboxes = document.querySelectorAll('input[name="q29_trust[]"]');
+            q29Checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const checked = document.querySelectorAll('input[name="q29_trust[]"]:checked').length;
+                    if (checked >= 3) {
+                        q29Checkboxes.forEach(c => {
+                            if (!c.checked) c.disabled = true;
+                        });
+                    } else {
+                        q29Checkboxes.forEach(c => c.disabled = false);
+                    }
+                });
+            });
+        },
+
+        nextSection() {
+            if (this.currentSection < this.totalSections - 1) {
+                if (this.currentSection > 0 && !this.validateSection(this.currentSection)) {
+                    this.showToast('Please complete all required fields', 'error');
+                    return;
+                }
+                
+                this.currentSection++;
+                this.updateUI();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                if (this.validateSection(this.currentSection)) {
+                    this.submitSurvey();
+                } else {
+                    this.showToast('Please complete all required fields', 'error');
+                }
+            }
+        },
+
+        prevSection() {
+            if (this.currentSection > 0) {
+                this.currentSection--;
+                this.updateUI();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        },
+
+        goToSection(section) {
+            if (section <= this.currentSection) {
+                this.currentSection = section;
+                this.updateUI();
+            }
+        },
+
+        validateSection(sectionIndex) {
+            const section = document.querySelector(`[data-section="${sectionIndex}"]`);
+            if (!section) return true;
+
+            const requiredInputs = section.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredInputs.forEach(input => {
+                const questionGroup = input.closest('.question-group');
+                
+                if (input.type === 'radio') {
+                    const name = input.name;
+                    const checked = section.querySelector(`input[name="${name}"]:checked`);
+                    if (!checked) {
+                        isValid = false;
+                        if (questionGroup) questionGroup.classList.add('has-error');
+                    } else {
+                        if (questionGroup) questionGroup.classList.remove('has-error');
+                    }
+                } else if (input.type === 'text' || input.tagName === 'TEXTAREA') {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        if (questionGroup) questionGroup.classList.add('has-error');
+                    } else {
+                        if (questionGroup) questionGroup.classList.remove('has-error');
+                    }
+                }
+            });
+
+            return isValid;
+        },
+
+        updateUI() {
+            // Update sections visibility
+            document.querySelectorAll('.survey-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const currentSectionEl = document.querySelector(`[data-section="${this.currentSection}"]`);
+            if (currentSectionEl) {
+                currentSectionEl.classList.add('active');
+            }
+
+            // Update progress
+            const progress = (this.currentSection / (this.totalSections - 1)) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressPercentage').textContent = Math.round(progress) + '%';
+            document.getElementById('currentSection').textContent = Math.max(1, this.currentSection);
+            document.getElementById('totalSections').textContent = this.totalSections - 1;
+
+            // Update dots
+            document.querySelectorAll('.section-dot').forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index === this.currentSection) {
+                    dot.classList.add('active');
+                } else if (index < this.currentSection) {
+                    dot.classList.add('completed');
+                }
+            });
+
+            // Update buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.style.visibility = this.currentSection === 0 ? 'hidden' : 'visible';
+
+            if (this.currentSection === 0) {
+                nextBtn.innerHTML = '<span>Get Started</span><i data-lucide="arrow-right"></i>';
+                nextBtn.classList.remove('btn-submit');
+            } else if (this.currentSection === this.totalSections - 1) {
+                nextBtn.innerHTML = '<i data-lucide="send"></i><span>Submit Survey</span>';
+                nextBtn.classList.add('btn-submit');
+            } else {
+                nextBtn.innerHTML = '<span>Continue</span><i data-lucide="arrow-right"></i>';
+                nextBtn.classList.remove('btn-submit');
+            }
+
+            // Re-initialize Lucide icons
+            lucide.createIcons();
+        },
+
+        collectResponses() {
+            const form = document.getElementById('surveyForm');
+            const formData = new FormData(form);
+            const responses = {};
+
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('[]')) {
+                    const cleanKey = key.replace('[]', '');
+                    if (!responses[cleanKey]) {
+                        responses[cleanKey] = [];
+                    }
+                    responses[cleanKey].push(value);
+                } else {
+                    responses[key] = value;
+                }
+            }
+
+            for (let key in responses) {
+                if (Array.isArray(responses[key])) {
+                    responses[key] = responses[key].join(', ');
+                }
+            }
+
+            responses.submitted_at = new Date().toISOString();
+            responses.id = 'response_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+            return responses;
+        },
+
+        async submitSurvey() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+
+            try {
+                const responses = this.collectResponses();
+                
+                // ========== SUPABASE CONFIGURATION ==========
+                const SUPABASE_URL = 'https://lyemvikuxyoinjmqouhv.supabase.co';
+                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZW12aWt1eHlvaW5qbXFvdWh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3OTc3MzAsImV4cCI6MjA4MjM3MzczMH0.y23G0JTji4J3rT3CgAbdN-ufAmGhUrgBZMCXRvK6Tp0';
+                // ============================================
+                
+                const surveyData = {
+                    q1_year: responses.q1_year || null,
+                    q2_gender: responses.q2_gender || null,
+                    q3_campus: responses.q3_campus || null,
+                    q4_income: responses.q4_income || null,
+                    q5_first_action: responses.q5_first_action || null,
+                    q5_other_specify: responses.q5_other_specify || null,
+                    q6_pattern: responses.q6_pattern || null,
+                    q7_runout: responses.q7_runout || null,
+                    q8_short: responses.q8_short || null,
+                    q9_loan: responses.q9_loan || null,
+                    q10_accommodation: parseInt(responses.q10_accommodation) || 0,
+                    q10_food: parseInt(responses.q10_food) || 0,
+                    q10_transport: parseInt(responses.q10_transport) || 0,
+                    q10_airtime: parseInt(responses.q10_airtime) || 0,
+                    q10_personal: parseInt(responses.q10_personal) || 0,
+                    q10_entertainment: parseInt(responses.q10_entertainment) || 0,
+                    q10_savings: parseInt(responses.q10_savings) || 0,
+                    q10_family: parseInt(responses.q10_family) || 0,
+                    q10_other: parseInt(responses.q10_other) || 0,
+                    q11_hard: responses.q11_hard || null,
+                    q12_regret: responses.q12_regret || null,
+                    q13_trigger: responses.q13_trigger ? responses.q13_trigger.split(', ') : [],
+                    q14_save: responses.q14_save || null,
+                    q15_where: responses.q15_where ? responses.q15_where.split(', ') : [],
+                    q16_barrier: responses.q16_barrier || null,
+                    q17_goal: responses.q17_goal || null,
+                    q18_withdraw: responses.q18_withdraw || null,
+                    q19_tool: responses.q19_tool || null,
+                    q20_why_stopped: responses.q20_why_stopped || null,
+                    q21_confidence: responses.q21_confidence || null,
+                    q22_training: responses.q22_training || null,
+                    q23_appeal: responses.q23_appeal || null,
+                    q24_percent: responses.q24_percent || null,
+                    q25_feature: responses.q25_feature || null,
+                    q26_invest: responses.q26_invest || null,
+                    q27_receive: responses.q27_receive || null,
+                    q28_concerns: responses.q28_concerns ? responses.q28_concerns.split(', ') : [],
+                    q29_trust: responses.q29_trust ? responses.q29_trust.split(', ') : [],
+                    q30_challenge: responses.q30_challenge || null,
+                    q31_feature: responses.q31_feature || null,
+                    q32_additional: responses.q32_additional || null,
+                    q33_followup: responses.q33_followup || null,
+                    q34_email: responses.q34_email || null,
+                    q34_whatsapp: responses.q34_whatsapp || null
+                };
+
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/survey_responses`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(surveyData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Supabase error:', errorText);
+                    throw new Error('Failed to submit survey');
+                }
+
+                console.log('Survey submitted successfully to Supabase!');
+
+                // Show success screen
+                document.getElementById('surveyForm').style.display = 'none';
+                document.querySelector('.navigation').style.display = 'none';
+                document.getElementById('successScreen').classList.add('active');
+                document.getElementById('sectionDots').style.display = 'none';
+
+                document.getElementById('progressBar').style.width = '100%';
+                document.getElementById('progressPercentage').textContent = '100%';
+
+                this.showToast('Survey submitted successfully!', 'success');
+
+            } catch (error) {
+                console.error('Error submitting survey:', error);
+                this.showToast('Error submitting survey. Please try again.', 'error');
+            } finally {
+                loadingOverlay.classList.remove('active');
+            }
+        },
+
+        showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
+                <span class="toast-message">${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    };
+
+    // Initialize on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+        SurveyApp.init();
+    });
+</script>
 </body>
 </html>
