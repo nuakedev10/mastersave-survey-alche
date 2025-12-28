@@ -3269,25 +3269,105 @@
             },
 
             async submitSurvey() {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                loadingOverlay.classList.add('active');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.classList.add('active');
 
-                try {
-                    const responses = this.collectResponses();
-                    
-                    // Save to localStorage so admin dashboard can read it
-                    let storedResponses = [];
-                    try {
-                        const stored = localStorage.getItem('mcf_survey_responses');
-                        if (stored) {
-                            storedResponses = JSON.parse(stored);
-                        }
-                    } catch (e) {
-                        storedResponses = [];
-                    }
-                    
-                    storedResponses.push(responses);
-                    localStorage.setItem('mcf_survey_responses', JSON.stringify(storedResponses));
+    try {
+        const responses = this.collectResponses();
+        
+        // ========== SUPABASE CONFIGURATION ==========
+        // Replace these with your actual Supabase credentials
+        const SUPABASE_URL = 'https://lyemvikuxyoinjmqouhv.supabase.co/';  // e.g., https://abc123.supabase.co
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZW12aWt1eHlvaW5qbXFvdWh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3OTc3MzAsImV4cCI6MjA4MjM3MzczMH0.y23G0JTji4J3rT3CgAbdN-ufAmGhUrgBZMCXRvK6Tp0'; // Your anon/public key
+        // ============================================
+        
+        // Prepare data for Supabase (convert to proper format)
+        const surveyData = {
+            q1_year: responses.q1_year || null,
+            q2_gender: responses.q2_gender || null,
+            q3_campus: responses.q3_campus || null,
+            q4_income: responses.q4_income || null,
+            q5_first_action: responses.q5_first_action || null,
+            q5_other_specify: responses.q5_other_specify || null,
+            q6_pattern: responses.q6_pattern || null,
+            q7_runout: responses.q7_runout || null,
+            q8_short: responses.q8_short || null,
+            q9_loan: responses.q9_loan || null,
+            q10_accommodation: parseInt(responses.q10_accommodation) || 0,
+            q10_food: parseInt(responses.q10_food) || 0,
+            q10_transport: parseInt(responses.q10_transport) || 0,
+            q10_airtime: parseInt(responses.q10_airtime) || 0,
+            q10_personal: parseInt(responses.q10_personal) || 0,
+            q10_entertainment: parseInt(responses.q10_entertainment) || 0,
+            q10_savings: parseInt(responses.q10_savings) || 0,
+            q10_family: parseInt(responses.q10_family) || 0,
+            q10_other: parseInt(responses.q10_other) || 0,
+            q11_hard: responses.q11_hard || null,
+            q12_regret: responses.q12_regret || null,
+            q13_trigger: responses.q13_trigger ? (Array.isArray(responses.q13_trigger) ? responses.q13_trigger : [responses.q13_trigger]) : [],
+            q14_save: responses.q14_save || null,
+            q15_where: responses.q15_where ? (Array.isArray(responses.q15_where) ? responses.q15_where : [responses.q15_where]) : [],
+            q16_barrier: responses.q16_barrier || null,
+            q17_goal: responses.q17_goal || null,
+            q18_withdraw: responses.q18_withdraw || null,
+            q19_tool: responses.q19_tool || null,
+            q20_why_stopped: responses.q20_why_stopped || null,
+            q21_confidence: responses.q21_confidence || null,
+            q22_training: responses.q22_training || null,
+            q23_appeal: responses.q23_appeal || null,
+            q24_percent: responses.q24_percent || null,
+            q25_feature: responses.q25_feature || null,
+            q26_invest: responses.q26_invest || null,
+            q27_receive: responses.q27_receive || null,
+            q28_concerns: responses.q28_concerns ? (Array.isArray(responses.q28_concerns) ? responses.q28_concerns : [responses.q28_concerns]) : [],
+            q29_trust: responses.q29_trust ? (Array.isArray(responses.q29_trust) ? responses.q29_trust : [responses.q29_trust]) : [],
+            q30_challenge: responses.q30_challenge || null,
+            q31_feature: responses.q31_feature || null,
+            q32_additional: responses.q32_additional || null,
+            q33_followup: responses.q33_followup || null,
+            q34_email: responses.q34_email || null,
+            q34_whatsapp: responses.q34_whatsapp || null
+        };
+
+        // Submit to Supabase
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/survey_responses`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(surveyData)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Supabase error:', errorText);
+            throw new Error('Failed to submit survey');
+        }
+
+        console.log('Survey submitted successfully to Supabase!');
+
+        // Show success screen
+        document.getElementById('surveyForm').style.display = 'none';
+        document.querySelector('.navigation').style.display = 'none';
+        document.getElementById('successScreen').classList.add('active');
+        document.getElementById('sectionDots').style.display = 'none';
+
+        // Update progress to 100%
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('progressPercentage').textContent = '100%';
+
+        this.showToast('Survey submitted successfully!', 'success');
+
+    } catch (error) {
+        console.error('Error submitting survey:', error);
+        this.showToast('Error submitting survey. Please try again.', 'error');
+    } finally {
+        loadingOverlay.classList.remove('active');
+    }
+}
 
                     // Simulate network delay
                     await new Promise(resolve => setTimeout(resolve, 1500));

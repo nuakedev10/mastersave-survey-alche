@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | MCF Survey</title>
-    
-    <!-- SF Pro Font Alternative (Inter) -->
+    <title>MCF Survey Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -39,532 +32,320 @@
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
-            --radius-xl: 24px;
-            --transition-fast: 0.15s ease;
-            --transition-normal: 0.3s ease;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-100);
-            color: var(--gray-800);
+            background: var(--gray-50);
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            color: var(--gray-800);
         }
 
-        /* ===== Sidebar ===== */
-        .sidebar {
+        .loading-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 260px;
-            height: 100vh;
-            background: var(--gray-900);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--gray-700);
-            margin-bottom: 24px;
-        }
-
-        .sidebar-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
-            border-radius: var(--radius-sm);
-            display: flex;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
             align-items: center;
             justify-content: center;
+            z-index: 2000;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .sidebar-logo-icon i {
-            width: 24px;
-            height: 24px;
-            color: var(--white);
+        .loading-overlay.active { display: flex; }
+
+        .loading-spinner {
+            width: 48px; height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .sidebar-logo-text {
-            color: var(--white);
-            font-size: 18px;
-            font-weight: 700;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .sidebar-nav {
-            flex: 1;
-        }
+        .loading-text { font-size: 14px; color: var(--gray-600); }
 
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: var(--gray-400);
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            margin-bottom: 4px;
-            transition: all var(--transition-fast);
-            cursor: pointer;
-        }
-
-        .nav-item:hover {
-            background: var(--gray-800);
-            color: var(--white);
-        }
-
-        .nav-item.active {
-            background: var(--primary-blue);
-            color: var(--white);
-        }
-
-        .nav-item i {
-            width: 20px;
-            height: 20px;
-        }
-
-        .sidebar-footer {
-            padding-top: 24px;
-            border-top: 1px solid var(--gray-700);
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: var(--gray-400);
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            transition: all var(--transition-fast);
-        }
-
-        .back-link:hover {
-            background: var(--gray-800);
-            color: var(--white);
-        }
-
-        .back-link i {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* ===== Main Content ===== */
-        .main-content {
-            margin-left: 260px;
-            padding: 32px;
-            min-height: 100vh;
-        }
-
-        /* ===== Content Panels ===== */
-        .content-panel {
-            display: none;
-        }
-
-        .content-panel.active {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== Header ===== */
-        .page-header {
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 20px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
-            animation: fadeInDown 0.5s ease-out;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+
+        .header-left h1 { font-size: 22px; font-weight: 700; color: var(--gray-900); }
+
+        .header-badge {
+            background: var(--primary-blue);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .page-title h1 {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .page-title p {
-            font-size: 14px;
-            color: var(--gray-500);
-        }
-
-        .header-actions {
+        .connection-status {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
         }
+
+        .connection-status.connected { background: #D1FAE5; color: var(--success-green); }
+        .connection-status.disconnected { background: #FEE2E2; color: var(--error-red); }
+        .connection-status.loading { background: #FEF3C7; color: var(--warning-yellow); }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .header-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 20px;
+            padding: 10px 20px;
             font-size: 14px;
             font-weight: 600;
-            font-family: inherit;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all var(--transition-fast);
             border: none;
+            transition: all 0.2s ease;
         }
 
-        .btn i {
-            width: 18px;
-            height: 18px;
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn i { width: 18px; height: 18px; }
+        .btn-primary { background: var(--primary-blue); color: white; }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-blue-dark); }
+        .btn-secondary { background: var(--white); color: var(--gray-700); border: 1px solid var(--gray-300); }
+        .btn-secondary:hover:not(:disabled) { background: var(--gray-50); }
+        .btn-success { background: var(--success-green); color: white; }
+        .btn-success:hover:not(:disabled) { background: #059669; }
+        .btn-danger { background: var(--error-red); color: white; }
+        .btn-danger:hover:not(:disabled) { background: #DC2626; }
+
+        .main-container { padding: 32px; max-width: 1600px; margin: 0 auto; }
+
+        .config-section {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border: 1px solid #FDBA74;
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 24px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
-            color: var(--white);
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        .config-section.connected {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-color: #6EE7B7;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        .config-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn-secondary {
-            background: var(--white);
-            color: var(--gray-700);
-            border: 2px solid var(--gray-200);
+        .config-section h4 i { width: 18px; height: 18px; }
+
+        .config-form { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+
+        .config-input-group { flex: 1; min-width: 250px; }
+
+        .config-input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
         }
 
-        .btn-secondary:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-300);
+        .config-input-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: 'Monaco', 'Consolas', monospace;
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, var(--success-green) 0%, #34D399 100%);
-            color: var(--white);
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        .config-input-group input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--error-red) 0%, #F87171 100%);
-            color: var(--white);
-        }
-
-        /* ===== Stats Cards ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 32px;
         }
 
         .stat-card {
             background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--gray-100);
-            animation: fadeInUp 0.5s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
             border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-100);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .stat-card-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-icon {
+            width: 44px; height: 44px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .stat-icon.blue {
-            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-        }
+        .stat-card-icon.blue { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); color: var(--primary-blue); }
+        .stat-card-icon.green { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); color: var(--success-green); }
+        .stat-card-icon.orange { background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); color: var(--mcf-orange); }
+        .stat-card-icon.purple { background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%); color: #9333EA; }
+        .stat-card-icon i { width: 22px; height: 22px; }
 
-        .stat-icon.green {
-            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
-        }
+        .stat-card-value { font-size: 36px; font-weight: 700; color: var(--gray-900); line-height: 1; }
+        .stat-card-change { font-size: 12px; color: var(--gray-500); margin-top: 8px; }
 
-        .stat-icon.orange {
-            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
-        }
-
-        .stat-icon.purple {
-            background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
-        }
-
-        .stat-icon i {
-            width: 24px;
-            height: 24px;
-        }
-
-        .stat-icon.blue i { color: var(--primary-blue); }
-        .stat-icon.green i { color: var(--success-green); }
-        .stat-icon.orange i { color: var(--mcf-orange); }
-        .stat-icon.purple i { color: #8B5CF6; }
-
-        .stat-trend {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 20px;
-        }
-
-        .stat-trend.up {
-            background: #ECFDF5;
-            color: var(--success-green);
-        }
-
-        .stat-trend.down {
-            background: #FEF2F2;
-            color: var(--error-red);
-        }
-
-        .stat-trend i {
-            width: 14px;
-            height: 14px;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: var(--gray-500);
-        }
-
-        /* ===== Data Table ===== */
-        .table-container {
+        .table-section {
             background: var(--white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-100);
             overflow: hidden;
-            animation: fadeInUp 0.5s ease-out 0.5s both;
         }
 
         .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gray-100);
-        }
-
-        .table-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .table-title h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
-
-        .table-title .badge {
-            background: var(--primary-blue);
-            color: var(--white);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .table-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
+            flex-wrap: wrap;
+            gap: 16px;
             background: var(--gray-50);
-            border: 2px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            transition: all var(--transition-fast);
         }
 
-        .search-box:focus-within {
-            border-color: var(--primary-blue);
+        .table-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-header h2 i { width: 20px; height: 20px; color: var(--primary-blue); }
+
+        .table-filters { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .filter-input {
+            padding: 8px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            min-width: 180px;
             background: var(--white);
         }
 
-        .search-box i {
-            width: 18px;
-            height: 18px;
-            color: var(--gray-400);
-        }
-
-        .search-box input {
-            border: none;
-            background: none;
+        .filter-input:focus {
             outline: none;
-            font-size: 14px;
-            font-family: inherit;
-            color: var(--gray-800);
-            width: 200px;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .search-box input::placeholder {
-            color: var(--gray-400);
-        }
+        .table-wrapper { overflow-x: auto; }
 
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        table { width: 100%; border-collapse: collapse; }
 
         th, td {
-            padding: 16px 20px;
+            padding: 14px 16px;
             text-align: left;
-            font-size: 14px;
-        }
-
-        th {
-            background: var(--gray-50);
-            font-weight: 600;
-            color: var(--gray-600);
-            border-bottom: 2px solid var(--gray-200);
-            white-space: nowrap;
-        }
-
-        td {
-            color: var(--gray-700);
             border-bottom: 1px solid var(--gray-100);
         }
 
-        tr:hover td {
-            background: var(--gray-50);
-        }
-
-        .response-id {
-            font-family: monospace;
-            font-size: 12px;
-            color: var(--gray-500);
-            background: var(--gray-100);
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .campus-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+        th {
+            background: var(--white);
+            font-size: 11px;
             font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
         }
 
-        .campus-badge.rwanda {
-            background: #DBEAFE;
-            color: #1E40AF;
+        td {
+            font-size: 14px;
+            color: var(--gray-700);
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .campus-badge.mauritius {
-            background: #D1FAE5;
-            color: #065F46;
+        tr:hover td { background: var(--gray-50); }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
-        .campus-badge.remote {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
+        .badge-blue { background: #EFF6FF; color: var(--primary-blue); }
+        .badge-green { background: #D1FAE5; color: var(--success-green); }
+        .badge-orange { background: #FFF7ED; color: var(--mcf-orange); }
+        .badge-red { background: #FEE2E2; color: var(--error-red); }
 
-        .action-btn {
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: var(--gray-100);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-            margin-right: 4px;
-        }
+        .empty-state { padding: 80px 24px; text-align: center; }
 
-        .action-btn:hover {
-            background: var(--primary-blue);
-            color: var(--white);
-        }
-
-        .action-btn.delete:hover {
-            background: var(--error-red);
-        }
-
-        .action-btn i {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* ===== Empty State ===== */
-        .empty-state {
-            padding: 80px 40px;
-            text-align: center;
-        }
-
-        .empty-icon {
-            width: 80px;
-            height: 80px;
+        .empty-state-icon {
+            width: 80px; height: 80px;
             background: var(--gray-100);
             border-radius: 50%;
             display: flex;
@@ -573,1195 +354,826 @@
             margin: 0 auto 24px;
         }
 
-        .empty-icon i {
-            width: 40px;
-            height: 40px;
-            color: var(--gray-400);
-        }
+        .empty-state-icon i { width: 40px; height: 40px; color: var(--gray-400); }
+        .empty-state h3 { font-size: 20px; font-weight: 600; color: var(--gray-800); margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; color: var(--gray-500); max-width: 400px; margin: 0 auto 24px; line-height: 1.6; }
 
-        .empty-state h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            color: var(--gray-500);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* ===== Charts ===== */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .chart-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--gray-100);
-        }
-
-        .chart-card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chart-card h3 i {
-            width: 20px;
-            height: 20px;
-            color: var(--primary-blue);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
-        /* ===== Settings ===== */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .settings-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--gray-100);
-        }
-
-        .settings-card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .settings-card h3 i {
-            width: 20px;
-            height: 20px;
-            color: var(--primary-blue);
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-100);
-        }
-
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .setting-info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-800);
-            margin-bottom: 4px;
-        }
-
-        .setting-info p {
-            font-size: 12px;
-            color: var(--gray-500);
-        }
-
-        .toggle-switch {
-            width: 48px;
-            height: 26px;
-            background: var(--gray-300);
-            border-radius: 13px;
-            position: relative;
-            cursor: pointer;
-            transition: background var(--transition-fast);
-        }
-
-        .toggle-switch.active {
-            background: var(--success-green);
-        }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--white);
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: transform var(--transition-fast);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .toggle-switch.active::after {
-            transform: translateX(22px);
-        }
-
-        /* ===== Response Modal ===== */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-normal);
+            padding: 20px;
+            backdrop-filter: blur(4px);
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal {
             background: var(--white);
-            border-radius: var(--radius-xl);
-            width: 90%;
-            max-width: 700px;
+            border-radius: var(--radius-lg);
+            max-width: 800px;
+            width: 100%;
             max-height: 90vh;
-            overflow: hidden;
-            transform: scale(0.9);
-            transition: transform var(--transition-normal);
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalSlideIn 0.3s ease;
         }
 
-        .modal-overlay.active .modal {
-            transform: scale(1);
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 24px;
-            border-bottom: 1px solid var(--gray-100);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 10;
         }
 
-        .modal-header h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
+        .modal-header h3 { font-size: 18px; font-weight: 600; }
 
         .modal-close {
-            width: 40px;
-            height: 40px;
+            background: none;
             border: none;
-            background: var(--gray-100);
-            border-radius: 50%;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            color: var(--gray-500);
+            transition: all 0.2s;
         }
 
-        .modal-close:hover {
-            background: var(--error-red);
-            color: var(--white);
+        .modal-close:hover { background: var(--gray-100); color: var(--gray-700); }
+        .modal-close i { width: 20px; height: 20px; }
+
+        .modal-body { padding: 24px; }
+        .response-detail { display: grid; gap: 12px; }
+        .response-section { margin-bottom: 20px; }
+
+        .response-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-100);
         }
 
-        .modal-close i {
-            width: 20px;
-            height: 20px;
+        .response-item {
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--gray-200);
+            margin-bottom: 8px;
         }
 
-        .modal-body {
-            padding: 24px;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-
-        .response-detail {
-            margin-bottom: 20px;
-        }
-
-        .response-detail-label {
-            font-size: 12px;
+        .response-item-label {
+            font-size: 11px;
             font-weight: 600;
             color: var(--gray-500);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
         }
 
-        .response-detail-value {
-            font-size: 15px;
+        .response-item-value {
+            font-size: 14px;
             color: var(--gray-800);
-            background: var(--gray-50);
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            border-left: 4px solid var(--primary-blue);
+            word-wrap: break-word;
+            line-height: 1.5;
         }
 
-        /* ===== Loading Spinner ===== */
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--gray-200);
-            border-top-color: var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 40px auto;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ===== Toast ===== */
         .toast-container {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .toast {
-            padding: 16px 24px;
-            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
             background: var(--white);
             box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease-out;
-            margin-bottom: 10px;
+            animation: toastSlideIn 0.3s ease;
+            max-width: 400px;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes toastSlideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         .toast.success { border-left: 4px solid var(--success-green); }
         .toast.error { border-left: 4px solid var(--error-red); }
+        .toast.info { border-left: 4px solid var(--primary-blue); }
+        .toast.warning { border-left: 4px solid var(--warning-yellow); }
 
-        .toast i { width: 20px; height: 20px; }
+        .toast i { width: 20px; height: 20px; flex-shrink: 0; }
         .toast.success i { color: var(--success-green); }
         .toast.error i { color: var(--error-red); }
+        .toast.info i { color: var(--primary-blue); }
+        .toast.warning i { color: var(--warning-yellow); }
 
-        /* ===== Refresh Animation ===== */
-        .refresh-btn.spinning i {
-            animation: spin 1s linear infinite;
+        .toast-message { font-size: 14px; color: var(--gray-700); }
+
+        .action-btn {
+            padding: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            color: var(--gray-400);
+            transition: all 0.2s;
         }
 
-        /* ===== Real-time Pulse Animation ===== */
-        .live-indicator {
+        .action-btn:hover { background: var(--gray-100); color: var(--gray-700); }
+        .action-btn.view:hover { background: #EFF6FF; color: var(--primary-blue); }
+        .action-btn.delete:hover { background: #FEE2E2; color: var(--error-red); }
+        .action-btn i { width: 16px; height: 16px; }
+
+        .actions-cell { display: flex; gap: 4px; }
+
+        .last-updated {
+            font-size: 12px;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .last-updated i { width: 14px; height: 14px; }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid var(--gray-100);
+            background: var(--gray-50);
+        }
+
+        .pagination-info { font-size: 13px; color: var(--gray-600); }
+        .pagination-controls { display: flex; gap: 8px; }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) { background: var(--gray-50); border-color: var(--primary-blue); }
+        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-btn.active { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }
+
+        .auto-refresh-indicator {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 12px;
-            font-weight: 600;
-            color: var(--success-green);
+            color: var(--gray-500);
         }
 
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success-green);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        /* ===== Responsive ===== */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .auto-refresh-indicator input { width: 16px; height: 16px; cursor: pointer; }
 
         @media (max-width: 768px) {
-            .page-header {
-                flex-direction: column;
-                gap: 16px;
-                align-items: flex-start;
-            }
-
-            .header-actions {
-                width: 100%;
-                flex-wrap: wrap;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .table-header {
-                flex-direction: column;
-                gap: 16px;
-                align-items: flex-start;
-            }
-
-            .table-actions {
-                width: 100%;
-                flex-wrap: wrap;
-            }
-
-            .search-box {
-                width: 100%;
-            }
-
-            .search-box input {
-                width: 100%;
-            }
-
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
+            .header { padding: 16px; }
+            .header-left h1 { font-size: 18px; }
+            .main-container { padding: 16px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .table-header { flex-direction: column; align-items: flex-start; }
+            .table-filters { width: 100%; }
+            .filter-input { width: 100%; min-width: unset; }
+            .config-form { flex-direction: column; }
+            .config-input-group { min-width: unset; }
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <div class="sidebar-logo-icon">
-                <i data-lucide="bar-chart-3"></i>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading responses...</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <h1>📊 MCF Survey Dashboard</h1>
+            <span class="header-badge" id="responseBadge">0 Responses</span>
+            <div class="connection-status loading" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span id="connectionText">Connecting...</span>
             </div>
-            <span class="sidebar-logo-text">SiLo Admin</span>
         </div>
-
-        <nav class="sidebar-nav">
-            <a class="nav-item active" data-panel="dashboard" onclick="AdminApp.switchPanel('dashboard')">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Dashboard</span>
-            </a>
-            <a class="nav-item" data-panel="responses" onclick="AdminApp.switchPanel('responses')">
-                <i data-lucide="file-text"></i>
-                <span>Responses</span>
-            </a>
-            <a class="nav-item" data-panel="analytics" onclick="AdminApp.switchPanel('analytics')">
-                <i data-lucide="pie-chart"></i>
-                <span>Analytics</span>
-            </a>
-            <a class="nav-item" data-panel="settings" onclick="AdminApp.switchPanel('settings')">
-                <i data-lucide="settings"></i>
-                <span>Settings</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <a href="index.html" class="back-link">
-                <i data-lucide="arrow-left"></i>
-                <span>Back to Survey</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        
-        <!-- ===== DASHBOARD PANEL ===== -->
-        <div class="content-panel active" id="panel-dashboard">
-            <header class="page-header">
-                <div class="page-title">
-                    <h1>Survey Dashboard</h1>
-                    <p>Monitor and analyze MCF Scholar survey responses</p>
-                </div>
-                <div class="header-actions">
-                    <div class="live-indicator">
-                        <div class="live-dot"></div>
-                        <span>Live Updates</span>
-                    </div>
-                    <button class="btn btn-secondary refresh-btn" id="refreshBtn" onclick="AdminApp.refreshData()">
-                        <i data-lucide="refresh-cw"></i>
-                        <span>Refresh</span>
-                    </button>
-                    <button class="btn btn-success" onclick="AdminApp.exportCSV()">
-                        <i data-lucide="download"></i>
-                        <span>Export CSV</span>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon blue">
-                            <i data-lucide="users"></i>
-                        </div>
-                        <div class="stat-trend up">
-                            <i data-lucide="trending-up"></i>
-                            <span>+12%</span>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="totalResponses">0</div>
-                    <div class="stat-label">Total Responses</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon green">
-                            <i data-lucide="check-circle"></i>
-                        </div>
-                        <div class="stat-trend up">
-                            <i data-lucide="trending-up"></i>
-                            <span>+8%</span>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="completionRate">0%</div>
-                    <div class="stat-label">Completion Rate</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon orange">
-                            <i data-lucide="clock"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="avgTime">0m</div>
-                    <div class="stat-label">Avg. Completion Time</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon purple">
-                            <i data-lucide="calendar"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="todayResponses">0</div>
-                    <div class="stat-label">Responses Today</div>
-                </div>
+        <div class="header-actions">
+            <div class="last-updated">
+                <i data-lucide="clock"></i>
+                <span id="lastUpdated">Never</span>
             </div>
+            <label class="auto-refresh-indicator">
+                <input type="checkbox" id="autoRefresh" checked>
+                Auto-refresh (30s)
+            </label>
+            <button class="btn btn-secondary" onclick="loadResponses()" id="refreshBtn">
+                <i data-lucide="refresh-cw"></i>
+                Refresh
+            </button>
+            <button class="btn btn-success" onclick="exportToCSV()" id="exportBtn">
+                <i data-lucide="download"></i>
+                Export CSV
+            </button>
+        </div>
+    </header>
 
-            <!-- Recent Responses Table -->
-            <div class="table-container">
-                <div class="table-header">
-                    <div class="table-title">
-                        <h2>Recent Responses</h2>
-                        <span class="badge" id="responseBadge">0 entries</span>
-                    </div>
-                    <div class="table-actions">
-                        <div class="search-box">
-                            <i data-lucide="search"></i>
-                            <input type="text" placeholder="Search responses..." id="searchInput" onkeyup="AdminApp.filterResponses()">
-                        </div>
-                    </div>
+    <main class="main-container">
+        <div class="config-section" id="configSection">
+            <h4><i data-lucide="database"></i> Supabase Connection</h4>
+            <div class="config-form">
+                <div class="config-input-group">
+                    <label for="supabaseUrl">Supabase Project URL</label>
+                    <input type="text" id="supabaseUrl" placeholder="https://xxxxx.supabase.co">
                 </div>
-
-                <div class="table-wrapper">
-                    <table id="responsesTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Submitted</th>
-                                <th>Year</th>
-                                <th>Gender</th>
-                                <th>Campus</th>
-                                <th>Savings</th>
-                                <th>Follow-up</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="responsesBody">
-                            <!-- Responses will be populated here -->
-                        </tbody>
-                    </table>
+                <div class="config-input-group">
+                    <label for="supabaseKey">Supabase Anon Key</label>
+                    <input type="password" id="supabaseKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
                 </div>
-
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <div class="empty-icon">
-                        <i data-lucide="inbox"></i>
-                    </div>
-                    <h3>No responses yet</h3>
-                    <p>Survey responses will appear here in real-time as they are submitted.</p>
-                </div>
+                <button class="btn btn-primary" onclick="saveAndConnect()">
+                    <i data-lucide="link"></i>
+                    Connect
+                </button>
             </div>
         </div>
 
-        <!-- ===== RESPONSES PANEL ===== -->
-        <div class="content-panel" id="panel-responses">
-            <header class="page-header">
-                <div class="page-title">
-                    <h1>All Responses</h1>
-                    <p>View and manage all survey submissions</p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Total Responses</span>
+                    <div class="stat-card-icon blue"><i data-lucide="file-text"></i></div>
                 </div>
-                <div class="header-actions">
-                    <button class="btn btn-secondary" onclick="AdminApp.refreshData()">
-                        <i data-lucide="refresh-cw"></i>
-                        <span>Refresh</span>
-                    </button>
-                    <button class="btn btn-success" onclick="AdminApp.exportCSV()">
-                        <i data-lucide="download"></i>
-                        <span>Export All</span>
-                    </button>
+                <div class="stat-card-value" id="statTotal">0</div>
+                <div class="stat-card-change">All time submissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Rwanda Campus</span>
+                    <div class="stat-card-icon green"><i data-lucide="map-pin"></i></div>
                 </div>
-            </header>
-
-            <div class="table-container">
-                <div class="table-header">
-                    <div class="table-title">
-                        <h2>Complete Response Data</h2>
-                        <span class="badge" id="responseBadge2">0 entries</span>
-                    </div>
-                    <div class="table-actions">
-                        <div class="search-box">
-                            <i data-lucide="search"></i>
-                            <input type="text" placeholder="Search..." id="searchInput2" onkeyup="AdminApp.filterResponses()">
-                        </div>
-                    </div>
+                <div class="stat-card-value" id="statRwanda">0</div>
+                <div class="stat-card-change">Kigali students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Mauritius Campus</span>
+                    <div class="stat-card-icon orange"><i data-lucide="map-pin"></i></div>
                 </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Submitted</th>
-                                <th>Year</th>
-                                <th>Gender</th>
-                                <th>Campus</th>
-                                <th>Income</th>
-                                <th>Savings</th>
-                                <th>Confidence</th>
-                                <th>Follow-up</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="responsesBody2">
-                            <!-- Responses will be populated here -->
-                        </tbody>
-                    </table>
+                <div class="stat-card-value" id="statMauritius">0</div>
+                <div class="stat-card-change">Mauritius students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Willing for Interview</span>
+                    <div class="stat-card-icon purple"><i data-lucide="user-check"></i></div>
                 </div>
-
-                <div class="empty-state" id="emptyState2" style="display: none;">
-                    <div class="empty-icon">
-                        <i data-lucide="inbox"></i>
-                    </div>
-                    <h3>No responses yet</h3>
-                    <p>Survey responses will appear here once students submit their feedback.</p>
-                </div>
+                <div class="stat-card-value" id="statInterview">0</div>
+                <div class="stat-card-change">Available for follow-up</div>
             </div>
         </div>
 
-        <!-- ===== ANALYTICS PANEL ===== -->
-        <div class="content-panel" id="panel-analytics">
-            <header class="page-header">
-                <div class="page-title">
-                    <h1>Analytics</h1>
-                    <p>Visual insights from survey data</p>
-                </div>
-                <div class="header-actions">
-                    <button class="btn btn-secondary" onclick="AdminApp.refreshData()">
-                        <i data-lucide="refresh-cw"></i>
-                        <span>Refresh Charts</span>
-                    </button>
-                </div>
-            </header>
-
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h3><i data-lucide="graduation-cap"></i> Responses by Year of Study</h3>
-                    <div class="chart-container">
-                        <canvas id="yearChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <h3><i data-lucide="map-pin"></i> Campus Distribution</h3>
-                    <div class="chart-container">
-                        <canvas id="campusChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <h3><i data-lucide="piggy-bank"></i> Savings Behavior</h3>
-                    <div class="chart-container">
-                        <canvas id="savingsChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <h3><i data-lucide="trending-up"></i> Financial Confidence</h3>
-                    <div class="chart-container">
-                        <canvas id="confidenceChart"></canvas>
-                    </div>
+        <div class="table-section">
+            <div class="table-header">
+                <h2><i data-lucide="database"></i> Survey Responses</h2>
+                <div class="table-filters">
+                    <input type="text" class="filter-input" id="searchInput" placeholder="🔍 Search..." oninput="filterResponses()">
+                    <select class="filter-input" id="campusFilter" onchange="filterResponses()">
+                        <option value="">All Campuses</option>
+                        <option value="Rwanda">Rwanda</option>
+                        <option value="Mauritius">Mauritius</option>
+                    </select>
+                    <select class="filter-input" id="yearFilter" onchange="filterResponses()">
+                        <option value="">All Years</option>
+                        <option value="Year 1">Year 1</option>
+                        <option value="Year 2">Year 2</option>
+                        <option value="Year 3">Year 3</option>
+                        <option value="Year 4">Year 4+</option>
+                    </select>
                 </div>
             </div>
-        </div>
-
-        <!-- ===== SETTINGS PANEL ===== -->
-        <div class="content-panel" id="panel-settings">
-            <header class="page-header">
-                <div class="page-title">
-                    <h1>Settings</h1>
-                    <p>Configure dashboard preferences</p>
-                </div>
-            </header>
-
-            <div class="settings-grid">
-                <div class="settings-card">
-                    <h3><i data-lucide="bell"></i> Notifications</h3>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Email Alerts</h4>
-                            <p>Receive email when new responses come in</p>
-                        </div>
-                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Daily Summary</h4>
-                            <p>Get a daily digest of survey activity</p>
-                        </div>
-                        <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
-                    </div>
-                </div>
-
-                <div class="settings-card">
-                    <h3><i data-lucide="database"></i> Data Management</h3>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Auto-backup</h4>
-                            <p>Automatically backup responses weekly</p>
-                        </div>
-                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Clear All Responses</h4>
-                            <p>Remove all survey data (cannot be undone)</p>
-                        </div>
-                        <button class="btn btn-danger" onclick="AdminApp.clearAllData()">
-                            <i data-lucide="trash-2"></i>
-                            Clear Data
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-card">
-                    <h3><i data-lucide="share-2"></i> Survey Link</h3>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Survey URL</h4>
-                            <p>Share this link with students</p>
-                        </div>
-                        <button class="btn btn-primary" onclick="AdminApp.copySurveyLink()">
-                            <i data-lucide="copy"></i>
-                            Copy Link
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-card">
-                    <h3><i data-lucide="info"></i> About</h3>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Version</h4>
-                            <p>MCF Survey Admin Dashboard v1.0</p>
-                        </div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Support</h4>
-                            <p>Contact: support@silogrp.com</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="table-wrapper">
+                <table id="responsesTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Year</th>
+                            <th>Gender</th>
+                            <th>Campus</th>
+                            <th>Biggest Challenge</th>
+                            <th>Follow-up</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="responsesBody"></tbody>
+                </table>
+            </div>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon"><i data-lucide="inbox"></i></div>
+                <h3>No Responses Yet</h3>
+                <p>Survey responses will appear here once students start submitting. Make sure your Supabase credentials are configured correctly.</p>
+                <button class="btn btn-primary" onclick="loadResponses()">
+                    <i data-lucide="refresh-cw"></i>
+                    Refresh Now
+                </button>
+            </div>
+            <div class="pagination" id="pagination" style="display: none;">
+                <div class="pagination-info" id="paginationInfo">Showing 0 responses</div>
+                <div class="pagination-controls" id="paginationControls"></div>
             </div>
         </div>
     </main>
 
-    <!-- Response Detail Modal -->
-    <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-overlay" id="detailModal">
         <div class="modal">
             <div class="modal-header">
-                <h2>Response Details</h2>
-                <button class="modal-close" onclick="AdminApp.closeModal()">
-                    <i data-lucide="x"></i>
-                </button>
+                <h3>📋 Response Details</h3>
+                <button class="modal-close" onclick="closeModal()"><i data-lucide="x"></i></button>
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Response details will be populated here -->
+            <div class="modal-body">
+                <div class="response-detail" id="responseDetail"></div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
 
-        // Chart instances
-        let yearChart, campusChart, savingsChart, confidenceChart;
+        // Configuration
+        let SUPABASE_URL = '';
+        let SUPABASE_KEY = '';
+        const ITEMS_PER_PAGE = 15;
 
-        // Admin Dashboard Application
-        const AdminApp = {
-            responses: [],
-            currentPanel: 'dashboard',
+        // State
+        let responses = [];
+        let filteredResponses = [];
+        let currentPage = 1;
+        let autoRefreshInterval = null;
+        let isConnected = false;
 
-            init() {
-                this.loadResponses();
-                this.bindEvents();
-                this.startAutoRefresh();
-            },
-
-            // Switch between panels
-            switchPanel(panelName) {
-                this.currentPanel = panelName;
-
-                // Update nav items
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
-                    if (item.dataset.panel === panelName) {
-                        item.classList.add('active');
-                    }
-                });
-
-                // Update panels
-                document.querySelectorAll('.content-panel').forEach(panel => {
-                    panel.classList.remove('active');
-                });
-                document.getElementById('panel-' + panelName).classList.add('active');
-
-                // Refresh data and charts when switching
-                this.loadResponses();
-                
-                // Update charts if on analytics panel
-                if (panelName === 'analytics') {
-                    setTimeout(() => this.updateCharts(), 100);
-                }
-
-                lucide.createIcons();
-            },
-
-            loadResponses() {
-                // Load from localStorage (shared with survey page)
-                try {
-                    const stored = localStorage.getItem('mcf_survey_responses');
-                    if (stored) {
-                        this.responses = JSON.parse(stored);
-                    } else {
-                        this.responses = [];
-                    }
-                } catch (e) {
-                    console.error('Error loading responses:', e);
-                    this.responses = [];
-                }
-
-                this.updateStats();
-                this.renderTable();
-                
-                if (this.currentPanel === 'analytics') {
-                    this.updateCharts();
-                }
-            },
-
-            bindEvents() {
-                document.getElementById('modalOverlay').addEventListener('click', (e) => {
-                    if (e.target === e.currentTarget) this.closeModal();
-                });
-            },
-
-            startAutoRefresh() {
-                // Auto-refresh every 10 seconds
-                setInterval(() => {
-                    this.loadResponses();
-                }, 10000);
-            },
-
-            refreshData() {
-                const btn = document.getElementById('refreshBtn');
-                if (btn) {
-                    btn.classList.add('spinning');
-                    setTimeout(() => {
-                        btn.classList.remove('spinning');
-                    }, 1000);
-                }
-                
-                this.loadResponses();
-                this.showToast('Data refreshed successfully', 'success');
-            },
-
-            updateStats() {
-                const total = this.responses.length;
-                const today = this.responses.filter(r => {
-                    const date = new Date(r.submitted_at);
-                    const now = new Date();
-                    return date.toDateString() === now.toDateString();
-                }).length;
-
-                document.getElementById('totalResponses').textContent = total;
-                document.getElementById('todayResponses').textContent = today;
-                document.getElementById('completionRate').textContent = total > 0 ? '100%' : '0%';
-                document.getElementById('avgTime').textContent = total > 0 ? '8m' : '0m';
-                document.getElementById('responseBadge').textContent = `${total} entries`;
-                
-                const badge2 = document.getElementById('responseBadge2');
-                if (badge2) badge2.textContent = `${total} entries`;
-            },
-
-            renderTable() {
-                const tbody = document.getElementById('responsesBody');
-                const tbody2 = document.getElementById('responsesBody2');
-                const emptyState = document.getElementById('emptyState');
-                const emptyState2 = document.getElementById('emptyState2');
-                const table = document.getElementById('responsesTable');
-
-                if (this.responses.length === 0) {
-                    if (table) table.style.display = 'none';
-                    if (emptyState) emptyState.style.display = 'block';
-                    if (emptyState2) emptyState2.style.display = 'block';
-                    if (tbody) tbody.innerHTML = '';
-                    if (tbody2) tbody2.innerHTML = '';
-                    return;
-                }
-
-                if (table) table.style.display = 'table';
-                if (emptyState) emptyState.style.display = 'none';
-                if (emptyState2) emptyState2.style.display = 'none';
-
-                const tableHTML = this.responses.slice().reverse().map(response => {
-                    const date = new Date(response.submitted_at);
-                    const formattedDate = date.toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                    const campusClass = response.q3_campus?.includes('Rwanda') ? 'rwanda' :
-                                       response.q3_campus?.includes('Mauritius') ? 'mauritius' : 'remote';
-
-                    const campusLabel = response.q3_campus?.includes('Rwanda') ? 'Rwanda' :
-                                       response.q3_campus?.includes('Mauritius') ? 'Mauritius' : 'Remote';
-
-                    return `
-                        <tr>
-                            <td><span class="response-id">${(response.id || 'N/A').substring(0, 12)}</span></td>
-                            <td>${formattedDate}</td>
-                            <td>${response.q1_year || 'N/A'}</td>
-                            <td>${response.q2_gender || 'N/A'}</td>
-                            <td><span class="campus-badge ${campusClass}">${campusLabel}</span></td>
-                            <td>${response.q14_save || 'N/A'}</td>
-                            <td>${response.q33_followup === 'Yes' ? '✓' : '—'}</td>
-                            <td>
-                                <button class="action-btn" onclick="AdminApp.viewResponse('${response.id}')">
-                                    <i data-lucide="eye"></i>
-                                </button>
-                                <button class="action-btn delete" onclick="AdminApp.deleteResponse('${response.id}')">
-                                    <i data-lucide="trash-2"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-                if (tbody) tbody.innerHTML = tableHTML;
-                if (tbody2) tbody2.innerHTML = tableHTML;
-
-                lucide.createIcons();
-            },
-
-            updateCharts() {
-                if (this.responses.length === 0) return;
-
-                const chartOptions = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                };
-
-                // Year Chart
-                const yearCounts = {};
-                this.responses.forEach(r => {
-                    const year = r.q1_year || 'Unknown';
-                    yearCounts[year] = (yearCounts[year] || 0) + 1;
-                });
-
-                const yearCtx = document.getElementById('yearChart');
-                if (yearCtx) {
-                    if (yearChart) yearChart.destroy();
-                    yearChart = new Chart(yearCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: Object.keys(yearCounts),
-                            datasets: [{
-                                label: 'Responses',
-                                data: Object.values(yearCounts),
-                                backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6']
-                            }]
-                        },
-                        options: chartOptions
-                    });
-                }
-
-                // Campus Chart
-                const campusCounts = {};
-                this.responses.forEach(r => {
-                    const campus = r.q3_campus?.includes('Rwanda') ? 'Rwanda' :
-                                  r.q3_campus?.includes('Mauritius') ? 'Mauritius' : 'Remote';
-                    campusCounts[campus] = (campusCounts[campus] || 0) + 1;
-                });
-
-                const campusCtx = document.getElementById('campusChart');
-                if (campusCtx) {
-                    if (campusChart) campusChart.destroy();
-                    campusChart = new Chart(campusCtx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: Object.keys(campusCounts),
-                            datasets: [{
-                                data: Object.values(campusCounts),
-                                backgroundColor: ['#3B82F6', '#10B981', '#EF4444']
-                            }]
-                        },
-                        options: chartOptions
-                    });
-                }
-
-                // Savings Chart
-                const savingsCounts = {};
-                this.responses.forEach(r => {
-                    const savings = r.q14_save || 'Unknown';
-                    savingsCounts[savings] = (savingsCounts[savings] || 0) + 1;
-                });
-
-                const savingsCtx = document.getElementById('savingsChart');
-                if (savingsCtx) {
-                    if (savingsChart) savingsChart.destroy();
-                    savingsChart = new Chart(savingsCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: Object.keys(savingsCounts),
-                            datasets: [{
-                                data: Object.values(savingsCounts),
-                                backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EF4444']
-                            }]
-                        },
-                        options: chartOptions
-                    });
-                }
-
-                // Confidence Chart
-                const confidenceCounts = {};
-                this.responses.forEach(r => {
-                    const confidence = r.q21_confidence || 'Unknown';
-                    confidenceCounts[confidence] = (confidenceCounts[confidence] || 0) + 1;
-                });
-
-                const confidenceCtx = document.getElementById('confidenceChart');
-                if (confidenceCtx) {
-                    if (confidenceChart) confidenceChart.destroy();
-                    confidenceChart = new Chart(confidenceCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: Object.keys(confidenceCounts),
-                            datasets: [{
-                                label: 'Responses',
-                                data: Object.values(confidenceCounts),
-                                backgroundColor: '#8B5CF6'
-                            }]
-                        },
-                        options: {
-                            ...chartOptions,
-                            indexAxis: 'y'
-                        }
-                    });
-                }
-            },
-
-            filterResponses() {
-                const query = (document.getElementById('searchInput')?.value || 
-                              document.getElementById('searchInput2')?.value || '').toLowerCase();
-                
-                const rows = document.querySelectorAll('#responsesBody tr, #responsesBody2 tr');
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(query) ? '' : 'none';
-                });
-            },
-
-            viewResponse(id) {
-                const response = this.responses.find(r => r.id === id);
-                if (!response) return;
-
-                const questionLabels = {
-                    q1_year: 'Year of Study',
-                    q2_gender: 'Gender',
-                    q3_campus: 'Campus',
-                    q4_income: 'Additional Income',
-                    q5_first_action: 'First Action with Stipend',
-                    q6_pattern: 'Spending Pattern',
-                    q7_runout: 'Run Out Frequency',
-                    q14_save: 'Saving Behavior',
-                    q21_confidence: 'Financial Confidence',
-                    q23_appeal: 'App Appeal',
-                    q30_challenge: 'Biggest Challenge',
-                    q31_feature: 'Ideal Feature',
-                    q32_additional: 'Additional Comments',
-                    q33_followup: 'Follow-up Permission',
-                    q34_email: 'Email',
-                    q34_whatsapp: 'WhatsApp'
-                };
-
-                let html = `
-                    <div class="response-detail">
-                        <div class="response-detail-label">Response ID</div>
-                        <div class="response-detail-value">${response.id}</div>
-                    </div>
-                    <div class="response-detail">
-                        <div class="response-detail-label">Submitted At</div>
-                        <div class="response-detail-value">${new Date(response.submitted_at).toLocaleString()}</div>
-                    </div>
-                `;
-
-                for (const [key, value] of Object.entries(response)) {
-                    if (key === 'id' || key === 'submitted_at') continue;
-                    const label = questionLabels[key] || key.replace(/_/g, ' ').replace(/q\d+/g, '').trim();
-                    if (value && value.toString().trim()) {
-                        html += `
-                            <div class="response-detail">
-                                <div class="response-detail-label">${label}</div>
-                                <div class="response-detail-value">${value}</div>
-                            </div>
-                        `;
-                    }
-                }
-
-                document.getElementById('modalBody').innerHTML = html;
-                document.getElementById('modalOverlay').classList.add('active');
-            },
-
-            closeModal() {
-                document.getElementById('modalOverlay').classList.remove('active');
-            },
-
-            deleteResponse(id) {
-                if (!confirm('Are you sure you want to delete this response?')) return;
-
-                this.responses = this.responses.filter(r => r.id !== id);
-                localStorage.setItem('mcf_survey_responses', JSON.stringify(this.responses));
-                this.loadResponses();
-                this.showToast('Response deleted', 'success');
-            },
-
-            clearAllData() {
-                if (!confirm('Are you sure you want to delete ALL responses? This cannot be undone!')) return;
-                if (!confirm('This is your last chance to cancel. Delete all data?')) return;
-
-                localStorage.removeItem('mcf_survey_responses');
-                this.responses = [];
-                this.loadResponses();
-                this.showToast('All data cleared', 'success');
-            },
-
-            copySurveyLink() {
-                const link = window.location.href.replace('admin.html', 'index.html');
-                navigator.clipboard.writeText(link).then(() => {
-                    this.showToast('Survey link copied to clipboard!', 'success');
-                }).catch(() => {
-                    this.showToast('Failed to copy link', 'error');
-                });
-            },
-
-            exportCSV() {
-                if (this.responses.length === 0) {
-                    this.showToast('No data to export', 'error');
-                    return;
-                }
-
-                // Get all unique keys
-                const allKeys = new Set();
-                this.responses.forEach(r => {
-                    Object.keys(r).forEach(k => allKeys.add(k));
-                });
-                const headers = Array.from(allKeys);
-
-                // Create CSV content
-                let csv = headers.join(',') + '\n';
-                
-                this.responses.forEach(response => {
-                    const row = headers.map(header => {
-                        let value = response[header] || '';
-                        value = String(value).replace(/"/g, '""');
-                        if (value.includes(',') || value.includes('\n') || value.includes('"')) {
-                            value = `"${value}"`;
-                        }
-                        return value;
-                    });
-                    csv += row.join(',') + '\n';
-                });
-
-                // Download
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.setAttribute('href', url);
-                link.setAttribute('download', `mcf_survey_responses_${new Date().toISOString().split('T')[0]}.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                this.showToast('CSV exported successfully!', 'success');
-            },
-
-            showToast(message, type = 'success') {
-                const container = document.getElementById('toastContainer');
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `
-                    <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
-                    <span>${message}</span>
-                `;
-                container.appendChild(toast);
-                lucide.createIcons();
-
-                setTimeout(() => {
-                    toast.style.animation = 'slideIn 0.3s ease-out reverse';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
+        // Question labels
+        const questionLabels = {
+            'id': 'Response ID',
+            'created_at': 'Submitted At',
+            'q1_year': 'Year of Study',
+            'q2_gender': 'Gender',
+            'q3_campus': 'Campus',
+            'q4_income': 'Other Income Source',
+            'q5_first_action': 'First Action with Stipend',
+            'q5_other_specify': 'First Action (Other)',
+            'q6_pattern': 'Spending Pattern',
+            'q7_runout': 'Run Out Frequency',
+            'q8_short': 'When Running Short',
+            'q9_loan': 'Mobile Money Loans',
+            'q10_accommodation': '% Accommodation',
+            'q10_food': '% Food',
+            'q10_transport': '% Transport',
+            'q10_airtime': '% Airtime/Data',
+            'q10_personal': '% Personal Care',
+            'q10_entertainment': '% Entertainment',
+            'q10_savings': '% Savings',
+            'q10_family': '% Family Support',
+            'q10_other': '% Other',
+            'q11_hard': 'Hardest to Control',
+            'q12_regret': 'Regret Purchases',
+            'q13_trigger': 'Impulse Triggers',
+            'q14_save': 'Currently Saving',
+            'q15_where': 'Where Savings Kept',
+            'q16_barrier': 'Saving Barrier',
+            'q17_goal': 'Goal-based Saving',
+            'q18_withdraw': 'Early Withdrawal Reason',
+            'q19_tool': 'Uses Budgeting Tool',
+            'q20_why_stopped': 'Why Stopped Using App',
+            'q21_confidence': 'Financial Confidence',
+            'q22_training': 'Financial Training',
+            'q23_appeal': 'Auto-split Appeal',
+            'q24_percent': 'Auto-save Percentage',
+            'q25_feature': 'Preferred Savings Feature',
+            'q26_invest': 'Investment Interest',
+            'q27_receive': 'App-based Stipend',
+            'q28_concerns': 'App Concerns',
+            'q29_trust': 'Trust Factors',
+            'q30_challenge': 'Biggest Challenge',
+            'q31_feature': 'Ideal Feature',
+            'q32_additional': 'Additional Comments',
+            'q33_followup': 'Follow-up Willing',
+            'q34_email': 'Email',
+            'q34_whatsapp': 'WhatsApp'
         };
 
-        // Initialize on DOM ready
-        document.addEventListener('DOMContentLoaded', () => {
-            AdminApp.init();
+        const questionSections = {
+            'Demographics': ['q1_year', 'q2_gender', 'q3_campus', 'q4_income'],
+            'Spending Behavior': ['q5_first_action', 'q5_other_specify', 'q6_pattern', 'q7_runout', 'q8_short', 'q9_loan'],
+            'Budget Allocation': ['q10_accommodation', 'q10_food', 'q10_transport', 'q10_airtime', 'q10_personal', 'q10_entertainment', 'q10_savings', 'q10_family', 'q10_other'],
+            'Spending Challenges': ['q11_hard', 'q12_regret', 'q13_trigger'],
+            'Savings Behavior': ['q14_save', 'q15_where', 'q16_barrier', 'q17_goal', 'q18_withdraw'],
+            'Financial Tools': ['q19_tool', 'q20_why_stopped', 'q21_confidence', 'q22_training'],
+            'App Preferences': ['q23_appeal', 'q24_percent', 'q25_feature', 'q26_invest', 'q27_receive', 'q28_concerns', 'q29_trust'],
+            'Open Feedback': ['q30_challenge', 'q31_feature', 'q32_additional'],
+            'Contact': ['q33_followup', 'q34_email', 'q34_whatsapp']
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUrl = localStorage.getItem('mcf_supabase_url');
+            const savedKey = localStorage.getItem('mcf_supabase_key');
+            
+            if (savedUrl && savedKey) {
+                SUPABASE_URL = savedUrl;
+                SUPABASE_KEY = savedKey;
+                document.getElementById('supabaseUrl').value = savedUrl;
+                document.getElementById('supabaseKey').value = savedKey;
+                loadResponses();
+            }
+
+            setupAutoRefresh();
+        });
+
+        function setupAutoRefresh() {
+            const checkbox = document.getElementById('autoRefresh');
+            checkbox.addEventListener('change', function() {
+                if (this.checked) startAutoRefresh();
+                else stopAutoRefresh();
+            });
+            if (checkbox.checked) startAutoRefresh();
+        }
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(() => {
+                if (SUPABASE_URL && SUPABASE_KEY && isConnected) {
+                    loadResponses(true);
+                }
+            }, 30000);
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+
+        function saveAndConnect() {
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+            
+            if (!url || !key) {
+                showToast('Please enter both Supabase URL and Key', 'error');
+                return;
+            }
+
+            SUPABASE_URL = url;
+            SUPABASE_KEY = key;
+            localStorage.setItem('mcf_supabase_url', url);
+            localStorage.setItem('mcf_supabase_key', key);
+            loadResponses();
+        }
+
+        function updateConnectionStatus(status) {
+            const statusEl = document.getElementById('connectionStatus');
+            const textEl = document.getElementById('connectionText');
+            const configSection = document.getElementById('configSection');
+            
+            statusEl.className = 'connection-status ' + status;
+            
+            switch(status) {
+                case 'connected':
+                    textEl.textContent = 'Connected';
+                    configSection.classList.add('connected');
+                    isConnected = true;
+                    break;
+                case 'disconnected':
+                    textEl.textContent = 'Disconnected';
+                    configSection.classList.remove('connected');
+                    isConnected = false;
+                    break;
+                case 'loading':
+                    textEl.textContent = 'Connecting...';
+                    break;
+            }
+        }
+
+        async function loadResponses(silent = false) {
+            if (!SUPABASE_URL || !SUPABASE_KEY) {
+                showToast('Please configure Supabase credentials first', 'warning');
+                return;
+            }
+
+            if (!silent) {
+                document.getElementById('loadingOverlay').classList.add('active');
+            }
+            
+            updateConnectionStatus('loading');
+
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/survey_responses?select=*&order=created_at.desc`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                }
+
+                responses = await response.json();
+                updateConnectionStatus('connected');
+                renderResponses();
+                updateStats();
+                updateLastUpdated();
+                
+                if (!silent) {
+                    showToast(`Loaded ${responses.length} response(s)`, 'success');
+                }
+            } catch (error) {
+                console.error('Load error:', error);
+                updateConnectionStatus('disconnected');
+                if (!silent) {
+                    showToast('Failed to load responses: ' + error.message, 'error');
+                }
+            } finally {
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+        }
+
+        function updateLastUpdated() {
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+        }
+
+        function renderResponses() {
+            const tbody = document.getElementById('responsesBody');
+            const emptyState = document.getElementById('emptyState');
+            const table = document.getElementById('responsesTable');
+            const pagination = document.getElementById('pagination');
+
+            applyFilters();
+
+            if (filteredResponses.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                table.style.display = 'none';
+                pagination.style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            table.style.display = 'table';
+            pagination.style.display = 'flex';
+
+            const totalPages = Math.ceil(filteredResponses.length / ITEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredResponses.length);
+            const pageResponses = filteredResponses.slice(startIndex, endIndex);
+
+            tbody.innerHTML = pageResponses.map((r, index) => {
+                const globalIndex = startIndex + index + 1;
+                const date = r.created_at ? new Date(r.created_at).toLocaleDateString() : 'N/A';
+                const challenge = r.q30_challenge || 'N/A';
+                const truncatedChallenge = challenge.length > 50 ? challenge.substring(0, 50) + '...' : challenge;
+                
+                const campusBadge = r.q3_campus?.includes('Rwanda') ? 'badge-green' : 
+                                   r.q3_campus?.includes('Mauritius') ? 'badge-orange' : 'badge-blue';
+                const followupBadge = r.q33_followup === 'Yes' ? 'badge-green' : 'badge-red';
+                
+                return `
+                    <tr>
+                        <td><strong>${globalIndex}</strong></td>
+                        <td>${date}</td>
+                        <td><span class="badge badge-blue">${r.q1_year || 'N/A'}</span></td>
+                        <td>${r.q2_gender || 'N/A'}</td>
+                        <td><span class="badge ${campusBadge}">${(r.q3_campus || 'N/A').replace('ALU ', '').replace(' (Kigali)', '')}</span></td>
+                        <td title="${challenge}">${truncatedChallenge}</td>
+                        <td><span class="badge ${followupBadge}">${r.q33_followup || 'N/A'}</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn view" onclick="viewDetails('${r.id}')" title="View">
+                                <i data-lucide="eye"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteResponse('${r.id}')" title="Delete">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('paginationInfo').textContent = 
+                `Showing ${startIndex + 1}-${endIndex} of ${filteredResponses.length} responses`;
+
+            renderPaginationControls(totalPages);
+            lucide.createIcons();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const campusFilter = document.getElementById('campusFilter').value;
+            const yearFilter = document.getElementById('yearFilter').value;
+
+            filteredResponses = responses.filter(r => {
+                const matchesSearch = !searchTerm || JSON.stringify(r).toLowerCase().includes(searchTerm);
+                const matchesCampus = !campusFilter || (r.q3_campus && r.q3_campus.includes(campusFilter));
+                const matchesYear = !yearFilter || (r.q1_year && r.q1_year.includes(yearFilter));
+                return matchesSearch && matchesCampus && matchesYear;
+            });
+        }
+
+        function renderPaginationControls(totalPages) {
+            const container = document.getElementById('paginationControls');
+            let html = `<button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            html += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+            container.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderResponses();
+        }
+
+        function filterResponses() {
+            currentPage = 1;
+            renderResponses();
+        }
+
+        function updateStats() {
+            document.getElementById('statTotal').textContent = responses.length;
+            document.getElementById('responseBadge').textContent = responses.length + ' Responses';
+
+            const rwanda = responses.filter(r => r.q3_campus?.includes('Rwanda')).length;
+            const mauritius = responses.filter(r => r.q3_campus?.includes('Mauritius')).length;
+            const interview = responses.filter(r => r.q33_followup === 'Yes').length;
+
+            document.getElementById('statRwanda').textContent = rwanda;
+            document.getElementById('statMauritius').textContent = mauritius;
+            document.getElementById('statInterview').textContent = interview;
+        }
+
+        function viewDetails(id) {
+            const response = responses.find(r => r.id === id);
+            if (!response) return;
+
+            const detailContainer = document.getElementById('responseDetail');
+            let html = '';
+
+            for (const [sectionName, fields] of Object.entries(questionSections)) {
+                const sectionFields = fields.filter(f => response[f] !== undefined && response[f] !== null && response[f] !== '');
+                if (sectionFields.length === 0) continue;
+
+                html += `<div class="response-section"><div class="response-section-title">${sectionName}</div>`;
+                
+                for (const field of sectionFields) {
+                    let value = response[field];
+                    if (Array.isArray(value)) value = value.join(', ');
+                    
+                    html += `
+                        <div class="response-item">
+                            <div class="response-item-label">${questionLabels[field] || field}</div>
+                            <div class="response-item-value">${value || 'N/A'}</div>
+                        </div>`;
+                }
+                html += `</div>`;
+            }
+
+            html += `<div class="response-section">
+                <div class="response-section-title">Metadata</div>
+                <div class="response-item">
+                    <div class="response-item-label">Response ID</div>
+                    <div class="response-item-value">${response.id}</div>
+                </div>
+                <div class="response-item">
+                    <div class="response-item-label">Submitted At</div>
+                    <div class="response-item-value">${response.created_at ? new Date(response.created_at).toLocaleString() : 'N/A'}</div>
+                </div>
+            </div>`;
+
+            detailContainer.innerHTML = html;
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        async function deleteResponse(id) {
+            if (!confirm('Are you sure you want to delete this response?')) return;
+
+            document.getElementById('loadingOverlay').classList.add('active');
+
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/survey_responses?id=eq.${id}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    }
+                );
+
+                if (!response.ok) throw new Error('Delete failed');
+
+                showToast('Response deleted successfully', 'success');
+                await loadResponses(true);
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('Failed to delete response', 'error');
+            } finally {
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+        }
+
+        function exportToCSV() {
+            if (responses.length === 0) {
+                showToast('No responses to export', 'error');
+                return;
+            }
+
+            const allKeys = Object.keys(questionLabels);
+            const csvContent = [
+                allKeys.map(k => `"${questionLabels[k]}"`).join(','),
+                ...responses.map(r => 
+                    allKeys.map(k => {
+                        let value = r[k] || '';
+                        if (Array.isArray(value)) value = value.join('; ');
+                        return `"${String(value).replace(/"/g, '""')}"`;
+                    }).join(',')
+                )
+            ].join('\n');
+
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `mcf_survey_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast(`Exported ${responses.length} responses`, 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = { success: 'check-circle', error: 'alert-circle', info: 'info', warning: 'alert-triangle' };
+            toast.innerHTML = `<i data-lucide="${icons[type]}"></i><span class="toast-message">${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
         });
     </script>
 </body>
