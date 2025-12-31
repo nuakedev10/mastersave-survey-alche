@@ -110,10 +110,10 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(180deg, 
-        rgba(239, 221, 221, 0.75) 0%, 
-        rgba(207, 99, 17, 0.7) 30%,
-        rgba(9, 40, 102, 0.65) 60%,
-        rgba(6, 29, 52, 0.7) 100%
+        rgba(111, 98, 98, 0.75) 0%, 
+        rgba(27, 37, 171, 0.7) 30%,
+        rgba(234, 29, 87, 0.65) 60%,
+        rgba(242, 241, 238, 0.7) 100%
     );
 }
 
@@ -169,12 +169,12 @@
         }
 
         /* ===== Main Container ===== */
-        .main-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-        }
+.main-container {
+    max-width: 750px;      /* Reduced from 800px */
+    margin: 0 auto;
+    padding: 16px;         /* Reduced padding */
+    min-height: 100vh;
+}
 
         /* ===== Header with Logos ===== */
         .header {
@@ -240,15 +240,19 @@
             border-color: #93C5FD;
         }
 
-        /* ===== Survey Card ===== */
-        .survey-card {
-            background: var(--white);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-            border: 1px solid var(--gray-100);
-        }
+       /* ===== Survey Card ===== */
+.survey-card {
+    background: rgba(255, 255, 255, 0.85);  /* Semi-transparent white */
+    backdrop-filter: blur(10px);             /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px);     /* Safari support */
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    border: 1px solid rgba(255, 255, 255, 0.3);  /* Subtle border */
+    max-width: 720px;                        /* Reduced width (was 800px in container) */
+    margin: 0 auto;                          /* Center the card */
+}
 
         @keyframes fadeInUp {
             from {
@@ -262,11 +266,11 @@
         }
 
         /* ===== Progress Bar ===== */
-        .progress-container {
-            padding: 24px 32px;
-            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
-            border-bottom: 1px solid var(--gray-100);
-        }
+       .progress-container {
+    padding: 20px 28px;
+    background: rgba(249, 250, 251, 0.7);  /* Semi-transparent */
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+}
 
         .progress-header {
             display: flex;
@@ -874,13 +878,13 @@
 
         /* ===== Section Navigation Dots ===== */
         .section-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 24px;
-            background: var(--gray-50);
-            border-top: 1px solid var(--gray-100);
-        }
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    background: rgba(249, 250, 251, 0.6);  /* Semi-transparent */
+    border-top: 1px solid rgba(229, 231, 235, 0.4);
+}
 
         .section-dot {
             width: 10px;
