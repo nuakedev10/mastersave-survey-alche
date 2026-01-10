@@ -4,22 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCF Scholars Stipend Survey | SiLo.Grp</title>
-    
     <!-- Open Graph tags for social media previews -->
-    <meta property="og:title" content="MCF Scholars Stipend Survey" />
-    <meta property="og:description" content="A 5-minute survey for MCF Scholars about stipend management at ALU & ALCHE. Your voice matters!" />
-    <meta property="og:image" content="https://mastersave-survey-alche.vercel.app/mastercard-logo.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://mastersave-survey-alche.vercel.app" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MCF Scholars Survey" />
-    
-    <!-- Twitter Card tags (also helps with some platforms) -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MCF Scholars Stipend Survey" />
-    <meta name="twitter:description" content="A 3-minute survey for MCF Scholars about stipend management at ALU & ALCHE." />
-    <meta name="twitter:image" content="https://mastersave-survey-alche.vercel.app/mastercard-logo.png" />
+  <meta property="og:title" content="MCF Scholars Stipend Survey" />
+  <meta property="og:description" content="A survey for MCF Scholars Stipend recipients at ALU & ALCHE" />
+  <meta property="og:image" content="https://mastersave-survey-alche.vercel.app/mastercard-logo.png" />
+  <meta property="og:url" content="https://mastersave-survey-alche.vercel.app" />
+  <meta property="og:type" content="website" />
+
+  <!-- For WhatsApp specifically, also add these -->
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF Scholars Stipend Survey | SiLo.Grp</title>
     
     <!-- SF Pro Font Alternative (Inter is the closest free alternative) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,10 +113,10 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(180deg, 
-        rgba(139, 215, 225, 0.75) 0%, 
-        rgba(213, 215, 240, 0.7) 30%,
-        rgba(91, 1, 26, 0.65) 60%,
-        rgba(41, 6, 197, 0.7) 100%
+        rgba(103, 115, 132, 0.75) 0%, 
+        rgba(89, 193, 98, 0.7) 30%,
+        rgba(221, 221, 219, 0.65) 60%,
+        rgba(60, 15, 2, 0.7) 100%
     );
 }
 
@@ -173,13 +171,13 @@
             75% { transform: translateY(20px) rotate(-5deg); }
         }
 
-       /* ===== Main Container ===== */
-.main-container {
-    max-width: 650px;
-    margin: 0 auto;
-    padding: 32px 24px;
-    min-height: 100vh;
-}
+        /* ===== Main Container ===== */
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
 
         /* ===== Header with Logos ===== */
         .header {
@@ -245,19 +243,15 @@
             border-color: #93C5FD;
         }
 
-       /* ===== Survey Card ===== */
-.survey-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
-    overflow: hidden;
-    animation: fadeInUp 0.8s ease-out 0.2s both;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    max-width: 600px;
-    margin: 0 auto;
-}
+        /* ===== Survey Card ===== */
+        .survey-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            border: 1px solid var(--gray-100);
+        }
 
         @keyframes fadeInUp {
             from {
@@ -271,11 +265,11 @@
         }
 
         /* ===== Progress Bar ===== */
-       .progress-container {
-    padding: 20px 28px;
-    background: rgba(249, 250, 251, 0.7);  /* Semi-transparent */
-    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-}
+        .progress-container {
+            padding: 24px 32px;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            border-bottom: 1px solid var(--gray-100);
+        }
 
         .progress-header {
             display: flex;
@@ -874,7 +868,7 @@
 
         .btn-submit {
             background: linear-gradient(135deg, var(--success-green) 0%, #34D399 100%);
-            box-shadow: 0 4px 14px rgba(76, 57, 168, 0.4);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
         }
 
         .btn-submit:hover {
@@ -883,13 +877,13 @@
 
         /* ===== Section Navigation Dots ===== */
         .section-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 20px;
-    background: rgba(249, 250, 251, 0.6);  /* Semi-transparent */
-    border-top: 1px solid rgba(229, 231, 235, 0.4);
-}
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 24px;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-100);
+        }
 
         .section-dot {
             width: 10px;
@@ -1002,309 +996,57 @@
             text-decoration: underline;
         }
 
-       /* ===== Responsive Design ===== */
-@media (max-width: 768px) {
-    .main-container {
-        padding: 28px 20px;
-    }
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 12px;
+            }
 
-    .survey-card {
-        max-width: calc(100% - 22px);
-        margin: 0 auto;
-        border-radius: var(--radius-lg);
-        background: rgba(193, 221, 133, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-    }
+            .header {
+                flex-direction: column;
+                gap: 16px;
+            }
 
-    .header {
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px 0;
-        margin-bottom: 12px;
-    }
+            .survey-content {
+                padding: 24px 20px;
+            }
 
-    .logo {
-        height: 42px;
-    }
+            .welcome-title {
+                font-size: 22px;
+            }
 
-    .survey-content {
-        padding: 18px 12px;
-    }
+            .question-group {
+                padding: 20px 16px;
+            }
 
-    .progress-container {
-        padding: 12px 14px;
-    }
+            .options-list, .text-input, .textarea-input, .slider-container, .percentage-grid {
+                margin-left: 0;
+            }
 
-    .progress-text {
-        font-size: 11px;
-    }
+            .text-input, .textarea-input {
+                width: 100%;
+            }
 
-    .progress-bar {
-        height: 6px;
-    }
+            .question-header {
+                flex-wrap: wrap;
+            }
 
-    .welcome-section {
-        padding: 8px 0 20px;
-    }
+            .navigation {
+                flex-direction: column;
+                gap: 12px;
+            }
 
-    .welcome-title {
-        font-size: 17px;
-        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-    }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
 
-    .welcome-description {
-        font-size: 13px;
-        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-    }
+            .percentage-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
 
-    .welcome-icon {
-        width: 50px;
-        height: 50px;
-    }
-
-    .welcome-icon i {
-        width: 26px;
-        height: 26px;
-    }
-
-    .incentive-banner {
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-
-    .question-group {
-        padding: 12px 10px;
-        margin-bottom: 16px;
-        background: rgba(255, 255, 255, 0.5);
-    }
-
-    .section-header {
-        margin-bottom: 16px;
-        padding-bottom: 10px;
-    }
-
-    .section-icon {
-        width: 32px;
-        height: 32px;
-    }
-
-    .section-icon i {
-        width: 16px;
-        height: 16px;
-    }
-
-    .section-info h2 {
-        font-size: 14px;
-        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-    }
-
-    .section-info p {
-        font-size: 11px;
-    }
-
-    .options-list, .text-input, .textarea-input, .slider-container, .percentage-grid {
-        margin-left: 0;
-    }
-
-    .text-input, .textarea-input {
-        width: 100%;
-        padding: 10px 12px;
-        font-size: 13px;
-        background: rgba(255, 255, 255, 0.7);
-    }
-
-    .option-label {
-        padding: 10px 12px;
-        font-size: 12px;
-        background: rgba(255, 255, 255, 0.6);
-    }
-
-    .option-label:hover {
-        background: rgba(255, 255, 255, 0.8);
-    }
-
-    .question-header {
-        flex-wrap: wrap;
-        margin-bottom: 10px;
-    }
-
-    .question-number {
-        width: 20px;
-        height: 20px;
-        font-size: 10px;
-    }
-
-    .question-label {
-        font-size: 13px;
-        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-    }
-
-    .navigation {
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 20px;
-        padding-top: 16px;
-    }
-
-    .btn {
-        width: 100%;
-        justify-content: center;
-        padding: 10px 20px;
-        font-size: 13px;
-    }
-
-    .percentage-row {
-        grid-template-columns: 1fr;
-        gap: 6px;
-        padding: 8px 10px;
-    }
-
-    .section-dots {
-        padding: 12px;
-        gap: 5px;
-    }
-
-    .section-dot {
-        width: 7px;
-        height: 7px;
-    }
-
-    .footer {
-        padding: 14px 12px;
-        font-size: 11px;
-    }
-}
-
-/* ===== Extra Small Screens ===== */
-@media (max-width: 480px) {
-    .main-container {
-        padding: 24px 16px;
-    }
-
-    .survey-card {
-        max-width: calc(100% - 24px);
-        background: rgba(255, 255, 255, 0.65);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .survey-content {
-        padding: 12px 10px;
-    }
-
-    .progress-container {
-        padding: 10px 12px;
-    }
-
-    .header {
-        padding: 8px 0;
-        gap: 8px;
-    }
-
-    .logo {
-        height: 28px;
-    }
-
-    .welcome-section {
-        padding: 6px 0 16px;
-    }
-
-    .welcome-title {
-        font-size: 15px;
-        font-weight: 700;
-    }
-
-    .welcome-description {
-        font-size: 12px;
-    }
-
-    .welcome-icon {
-        width: 44px;
-        height: 44px;
-    }
-
-    .welcome-icon i {
-        width: 22px;
-        height: 22px;
-    }
-
-    .incentive-banner {
-        padding: 6px 10px;
-        font-size: 11px;
-    }
-
-    .question-group {
-        padding: 10px 8px;
-        margin-bottom: 14px;
-        border-radius: 10px;
-    }
-
-    .section-header {
-        margin-bottom: 12px;
-        padding-bottom: 8px;
-    }
-
-    .section-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .section-info h2 {
-        font-size: 13px;
-    }
-
-    .section-info p {
-        font-size: 10px;
-    }
-
-    .question-label {
-        font-size: 12px;
-        line-height: 1.4;
-    }
-
-    .question-number {
-        width: 18px;
-        height: 18px;
-        font-size: 9px;
-    }
-
-    .option-label {
-        padding: 8px 10px;
-        font-size: 11px;
-        border-radius: 8px;
-    }
-
-    .text-input, .textarea-input {
-        padding: 8px 10px;
-        font-size: 12px;
-    }
-
-    .navigation {
-        gap: 8px;
-        margin-top: 16px;
-        padding-top: 12px;
-    }
-
-    .btn {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
-
-    .footer {
-        padding: 12px 10px;
-        font-size: 10px;
-    }
-
-    .section-dots {
-        padding: 10px;
-        gap: 4px;
-    }
-
-    .section-dot {
-        width: 6px;
-        height: 6px;
-    }
-}
         /* ===== Loading Animation ===== */
         .loading-overlay {
             position: fixed;
@@ -1312,7 +1054,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(175, 144, 144, 0.9);
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1480,13 +1222,13 @@
                                 <i data-lucide="clipboard-check"></i>
                             </div>
                             <h1 class="welcome-title">Understanding How MCF Scholars Manage Their Stipends</h1>
-                            <p class="welcome-subtitle">A research initiative by MCF scholars & SiLo.Grp</p>
+                            <p class="welcome-subtitle">A research initiative by MCF Scholars & SiLo.Grp</p>
                             <p class="welcome-description">
-                                Hi! This 10-minute survey is part of a student-led project to understand how Mastercard Foundation scholars manage their monthly stipends. Your honest responses will help us design better financial tools for students like you. All responses are anonymous and will only be used for research purposes.
+                                Hi! This 5-minute survey is part of a student-led project to understand how Mastercard Foundation scholars manage their monthly stipends. Your honest responses will help us design better financial tools for students like you. All responses are anonymous and will only be used for research purposes.
                             </p>
                             <div class="incentive-banner">
                                 <i data-lucide="gift"></i>
-                                <span class="incentive-text">5 randomly selected participants will win free screen protectors + pilot program access!</span>
+                                <span class="incentive-text">10 randomly selected participants will win free screen protectors + pilot program access!</span>
                             </div>
                         </div>
                     </div>
@@ -1601,10 +1343,10 @@
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q3_campus" id="q3_mauritius" value="ALCHE Mauritius" class="option-input">
+                                    <input type="radio" name="q3_campus" id="q3_mauritius" value="ALU Mauritius" class="option-input">
                                     <label for="q3_mauritius" class="option-label">
                                         <span class="option-radio"></span>
-                                        <span>ALCHE Mauritius</span>
+                                        <span>ALU Mauritius</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
@@ -2174,7 +1916,55 @@
                             </div>
                         </div>
 
-                        
+                        <!-- Q13 -->
+                        <div class="question-group" data-question="13">
+                            <div class="question-header">
+                                <span class="question-number">13</span>
+                                <label class="question-label">What typically triggers your unplanned or impulse spending?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_peer" value="Peer pressure" class="option-input">
+                                    <label for="q13_peer" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Peer pressure or social situations</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_emotional" value="Emotional state" class="option-input">
+                                    <label for="q13_emotional" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Emotional state (stress, boredom, celebration)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_sales" value="Sales/Deals" class="option-input">
+                                    <label for="q13_sales" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Sales, promotions, or "good deals"</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_convenience" value="Convenience" class="option-input">
+                                    <label for="q13_convenience" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Convenience (easier to buy than to plan)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q13_trigger[]" id="q13_none" value="No impulse spending" class="option-input">
+                                    <label for="q13_none" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't experience impulse spending</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Section 4: Savings Behavior -->
                     <div class="survey-section" data-section="4">
@@ -2188,111 +1978,39 @@
                             </div>
                         </div>
 
-                        <!-- Q13 -->
-                        <div class="question-group" data-question="13">
+                        <!-- Q14 -->
+                        <div class="question-group" data-question="14">
                             <div class="question-header">
-                                <span class="question-number">13</span>
+                                <span class="question-number">14</span>
                                 <label class="question-label">Do you currently save any portion of your monthly stipend?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q13_save" id="q13_consistently" value="Consistently" class="option-input" required>
-                                    <label for="q13_consistently" class="option-label">
+                                    <input type="radio" name="q14_save" id="q14_consistently" value="Consistently" class="option-input" required>
+                                    <label for="q14_consistently" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Yes, consistently every month</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q13_save" id="q13_occasionally" value="Occasionally" class="option-input">
-                                    <label for="q13_occasionally" class="option-label">
+                                    <input type="radio" name="q14_save" id="q14_occasionally" value="Occasionally" class="option-input">
+                                    <label for="q14_occasionally" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Yes, but only occasionally or inconsistently</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q13_save" id="q13_try" value="Try but can't" class="option-input">
-                                    <label for="q13_try" class="option-label">
+                                    <input type="radio" name="q14_save" id="q14_try" value="Try but can't" class="option-input">
+                                    <label for="q14_try" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>I try to, but usually can't manage it</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q13_save" id="q13_no" value="Don't save" class="option-input">
-                                    <label for="q13_no" class="option-label">
+                                    <input type="radio" name="q14_save" id="q14_no" value="Don't save" class="option-input">
+                                    <label for="q14_no" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>No, I don't save at all</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-
-                        <!-- Q14 -->
-                        <div class="question-group" data-question="14">
-                            <div class="question-header">
-                                <span class="question-number">14</span>
-                                <label class="question-label">What is the main reason you don't save more?<span class="required-star">*</span></label>
-                            </div>
-                            <div class="question-hint">
-                                <i data-lucide="info"></i>
-                                <span>Select the ONE biggest barrier</span>
-                            </div>
-                            <div class="options-list">
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_barely" value="Barely enough" class="option-input" required>
-                                    <label for="q14_barely" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>My stipend is barely enough to cover basic expenses</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_intend" value="Intend but spend" class="option-input">
-                                    <label for="q14_intend" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>I intend to save but end up spending it</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_no_goal" value="No specific goal" class="option-input">
-                                    <label for="q14_no_goal" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>I don't have a specific goal to save toward</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_pointless" value="Feels pointless" class="option-input">
-                                    <label for="q14_pointless" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>Saving feels pointless — the interest is too low</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_trust" value="Don't trust" class="option-input">
-                                    <label for="q14_trust" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>I don't trust banks or financial apps with my money</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_how" value="Don't know how" class="option-input">
-                                    <label for="q14_how" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>I don't know how to save effectively</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_family" value="Family obligations" class="option-input">
-                                    <label for="q14_family" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>Family obligations take priority</span>
-                                    </label>
-                                </div>
-                                <div class="option-item">
-                                    <input type="radio" name="q14_barrier" id="q14_enough" value="Save enough" class="option-input">
-                                    <label for="q14_enough" class="option-label">
-                                        <span class="option-radio"></span>
-                                        <span>I actually save enough — this isn't a problem for me</span>
                                     </label>
                                 </div>
                             </div>
@@ -2302,33 +2020,167 @@
                         <div class="question-group" data-question="15">
                             <div class="question-header">
                                 <span class="question-number">15</span>
+                                <label class="question-label">If you do save (or try to), where do you keep your savings?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_main_wallet" value="Main mobile money" class="option-input">
+                                    <label for="q15_main_wallet" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>In my main mobile money wallet</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_separate" value="Separate mobile money" class="option-input">
+                                    <label for="q15_separate" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>In a separate mobile money account</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_bank" value="Bank savings" class="option-input">
+                                    <label for="q15_bank" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>In a bank savings account</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_friend" value="With friend/family" class="option-input">
+                                    <label for="q15_friend" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>With a friend or family member (for safekeeping)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_cash" value="Cash hidden" class="option-input">
+                                    <label for="q15_cash" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Cash hidden somewhere safe</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_app" value="Savings app" class="option-input">
+                                    <label for="q15_app" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I use a savings app or platform</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q15_where[]" id="q15_dont" value="Don't save" class="option-input">
+                                    <label for="q15_dont" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't currently save</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q15_app_specify" class="text-input" placeholder="Which app do you use?" style="margin-top: 12px; display: none;" id="q15_app_input">
+                        </div>
+
+                        <!-- Q16 -->
+                        <div class="question-group" data-question="16">
+                            <div class="question-header">
+                                <span class="question-number">16</span>
+                                <label class="question-label">What is the main reason you don't save more?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="info"></i>
+                                <span>Select the ONE biggest barrier</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_barely" value="Barely enough" class="option-input" required>
+                                    <label for="q16_barely" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>My stipend is barely enough to cover basic expenses</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_intend" value="Intend but spend" class="option-input">
+                                    <label for="q16_intend" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I intend to save but end up spending it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_no_goal" value="No specific goal" class="option-input">
+                                    <label for="q16_no_goal" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I don't have a specific goal to save toward</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_pointless" value="Feels pointless" class="option-input">
+                                    <label for="q16_pointless" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Saving feels pointless — the interest is too low</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_trust" value="Don't trust" class="option-input">
+                                    <label for="q16_trust" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I don't trust banks or financial apps with my money</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_how" value="Don't know how" class="option-input">
+                                    <label for="q16_how" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I don't know how to save effectively</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_family" value="Family obligations" class="option-input">
+                                    <label for="q16_family" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Family obligations take priority</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q16_barrier" id="q16_enough" value="Save enough" class="option-input">
+                                    <label for="q16_enough" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>I actually save enough — this isn't a problem for me</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q17 -->
+                        <div class="question-group" data-question="17">
+                            <div class="question-header">
+                                <span class="question-number">17</span>
                                 <label class="question-label">Have you ever saved money for a specific goal (e.g., laptop, travel, emergency fund)?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q15_goal" id="q15_reached" value="Reached goal" class="option-input" required>
-                                    <label for="q15_reached" class="option-label">
+                                    <input type="radio" name="q17_goal" id="q17_reached" value="Reached goal" class="option-input" required>
+                                    <label for="q17_reached" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Yes, and I successfully reached the goal</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q15_goal" id="q15_withdrew" value="Withdrew early" class="option-input">
-                                    <label for="q15_withdrew" class="option-label">
+                                    <input type="radio" name="q17_goal" id="q17_withdrew" value="Withdrew early" class="option-input">
+                                    <label for="q17_withdrew" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Yes, but I withdrew the money before reaching the goal</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q15_goal" id="q15_like_to" value="Would like to" class="option-input">
-                                    <label for="q15_like_to" class="option-label">
+                                    <input type="radio" name="q17_goal" id="q17_like_to" value="Would like to" class="option-input">
+                                    <label for="q17_like_to" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>No, but I'd like to</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q15_goal" id="q15_not_interested" value="Not interested" class="option-input">
-                                    <label for="q15_not_interested" class="option-label">
+                                    <input type="radio" name="q17_goal" id="q17_not_interested" value="Not interested" class="option-input">
+                                    <label for="q17_not_interested" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>No, I'm not interested in goal-based saving</span>
                                     </label>
@@ -2336,7 +2188,7 @@
                             </div>
                         </div>
 
-                        <!-- Q16 -->
+                        <!-- Q18 -->
                         <div class="question-group" data-question="18" id="q18_container" style="display: none;">
                             <div class="question-header">
                                 <span class="question-number">18</span>
@@ -2395,16 +2247,16 @@
                             </div>
                         </div>
 
-                        <!-- Q17 -->
-                        <div class="question-group" data-question="17">
+                        <!-- Q19 -->
+                        <div class="question-group" data-question="19">
                             <div class="question-header">
-                                <span class="question-number">17</span>
+                                <span class="question-number">19</span>
                                 <label class="question-label">Do you currently use any app or tool to track your spending or manage your budget?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q17_tool" id="q17_yes" value="Yes" class="option-input" required>
-                                    <label for="q17_yes" class="option-label">
+                                    <input type="radio" name="q19_tool" id="q19_yes" value="Yes" class="option-input" required>
+                                    <label for="q19_yes" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Yes</span>
                                     </label>
@@ -2434,90 +2286,90 @@
                             <input type="text" name="q19_app_specify" class="text-input" placeholder="Which app do you use?" style="margin-top: 12px; display: none;" id="q19_app_input">
                         </div>
 
-                        <!-- Q18 -->
-                        <div class="question-group" data-question="18" id="q18_container" style="display: none;">
+                        <!-- Q20 -->
+                        <div class="question-group" data-question="20" id="q20_container" style="display: none;">
                             <div class="question-header">
-                                <span class="question-number">18</span>
+                                <span class="question-number">20</span>
                                 <label class="question-label">If you tried a budgeting app before and stopped, why did you stop?</label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q18_why_stopped" id="q18_complicated" value="Too complicated" class="option-input">
-                                    <label for="q18_complicated" class="option-label">
+                                    <input type="radio" name="q20_why_stopped" id="q20_complicated" value="Too complicated" class="option-input">
+                                    <label for="q20_complicated" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>It was too complicated</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q18_why_stopped" id="q18_manual" value="Too much input" class="option-input">
-                                    <label for="q18_manual" class="option-label">
+                                    <input type="radio" name="q20_why_stopped" id="q20_manual" value="Too much input" class="option-input">
+                                    <label for="q20_manual" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>It required too much manual input</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q18_why_stopped" id="q18_not_designed" value="Not for students" class="option-input">
-                                    <label for="q18_not_designed" class="option-label">
+                                    <input type="radio" name="q20_why_stopped" id="q20_not_designed" value="Not for students" class="option-input">
+                                    <label for="q20_not_designed" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>It wasn't designed for my situation (student, stipend-based)</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q18_why_stopped" id="q18_forgot" value="Forgot to use" class="option-input">
-                                    <label for="q18_forgot" class="option-label">
+                                    <input type="radio" name="q20_why_stopped" id="q20_forgot" value="Forgot to use" class="option-input">
+                                    <label for="q20_forgot" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>I forgot to use it consistently</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q18_why_stopped" id="q18_language" value="Language" class="option-input">
-                                    <label for="q18_language" class="option-label">
+                                    <input type="radio" name="q20_why_stopped" id="q20_language" value="Language" class="option-input">
+                                    <label for="q20_language" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>It wasn't available in my preferred language</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q18_why_stopped" id="q18_other" value="Other" class="option-input">
-                                    <label for="q18_other" class="option-label">
+                                    <input type="radio" name="q20_why_stopped" id="q20_other" value="Other" class="option-input">
+                                    <label for="q20_other" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Other</span>
                                     </label>
                                 </div>
                             </div>
-                            <input type="text" name="q18_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q18_other_input">
+                            <input type="text" name="q20_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q20_other_input">
                         </div>
 
-                        <!-- Q19 -->
-                        <div class="question-group" data-question="19">
+                        <!-- Q21 -->
+                        <div class="question-group" data-question="21">
                             <div class="question-header">
-                                <span class="question-number">19</span>
+                                <span class="question-number">21</span>
                                 <label class="question-label">How confident do you feel about managing your money effectively?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q19_confidence" id="q19_very" value="Very confident" class="option-input" required>
-                                    <label for="q19_very" class="option-label">
+                                    <input type="radio" name="q21_confidence" id="q21_very" value="Very confident" class="option-input" required>
+                                    <label for="q21_very" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Very confident — I have a good system</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q19_confidence" id="q19_somewhat" value="Somewhat confident" class="option-input">
-                                    <label for="q19_somewhat" class="option-label">
+                                    <input type="radio" name="q21_confidence" id="q21_somewhat" value="Somewhat confident" class="option-input">
+                                    <label for="q21_somewhat" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Somewhat confident — I manage okay but could improve</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q19_confidence" id="q19_not_very" value="Not very confident" class="option-input">
-                                    <label for="q19_not_very" class="option-label">
+                                    <input type="radio" name="q21_confidence" id="q21_not_very" value="Not very confident" class="option-input">
+                                    <label for="q21_not_very" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Not very confident — I often feel uncertain about my finances</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q19_confidence" id="q19_not_at_all" value="Not confident at all" class="option-input">
-                                    <label for="q19_not_at_all" class="option-label">
+                                    <input type="radio" name="q21_confidence" id="q21_not_at_all" value="Not confident at all" class="option-input">
+                                    <label for="q21_not_at_all" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Not confident at all — I feel stressed about money regularly</span>
                                     </label>
@@ -2525,7 +2377,51 @@
                             </div>
                         </div>
 
-                        
+                        <!-- Q22 -->
+                        <div class="question-group" data-question="22">
+                            <div class="question-header">
+                                <span class="question-number">22</span>
+                                <label class="question-label">Have you ever received any formal financial literacy training or education?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_school" value="School/University" class="option-input" required>
+                                    <label for="q22_school" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, through school or university</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_mcf" value="MCF/Scholarship" class="option-input">
+                                    <label for="q22_mcf" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, through MCF or another scholarship program</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_family" value="Family" class="option-input">
+                                    <label for="q22_family" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Yes, through family</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_no_interested" value="No but interested" class="option-input">
+                                    <label for="q22_no_interested" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, but I'd be interested</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q22_training" id="q22_no_not" value="No not interested" class="option-input">
+                                    <label for="q22_no_not" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>No, and I'm not particularly interested</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Section 6: Concept Validation -->
                     <div class="survey-section" data-section="6">
@@ -2539,44 +2435,44 @@
                             </div>
                         </div>
 
-                        <!-- Q20 -->
-                        <div class="question-group" data-question="20">
+                        <!-- Q23 -->
+                        <div class="question-group" data-question="23">
                             <div class="question-header">
-                                <span class="question-number">20</span>
+                                <span class="question-number">23</span>
                                 <label class="question-label">Imagine an app that automatically splits your stipend as soon as you receive it — putting a portion into savings you can't easily touch, and releasing the rest as a weekly budget. How appealing does this sound?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q20_appeal" id="q20_very" value="Very appealing" class="option-input" required>
-                                    <label for="q20_very" class="option-label">
+                                    <input type="radio" name="q23_appeal" id="q23_very" value="Very appealing" class="option-input" required>
+                                    <label for="q23_very" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Very appealing — this would help me a lot</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q20_appeal" id="q20_somewhat" value="Somewhat appealing" class="option-input">
-                                    <label for="q20_somewhat" class="option-label">
+                                    <input type="radio" name="q23_appeal" id="q23_somewhat" value="Somewhat appealing" class="option-input">
+                                    <label for="q23_somewhat" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Somewhat appealing — I'd consider trying it</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q20_appeal" id="q20_neutral" value="Neutral" class="option-input">
-                                    <label for="q20_neutral" class="option-label">
+                                    <input type="radio" name="q23_appeal" id="q23_neutral" value="Neutral" class="option-input">
+                                    <label for="q23_neutral" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Neutral — I'm not sure if I'd use it</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q20_appeal" id="q20_not" value="Not appealing" class="option-input">
-                                    <label for="q20_not" class="option-label">
+                                    <input type="radio" name="q23_appeal" id="q23_not" value="Not appealing" class="option-input">
+                                    <label for="q23_not" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Not appealing — I prefer to manage my money myself</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q20_appeal" id="q20_not_at_all" value="Not appealing at all" class="option-input">
-                                    <label for="q20_not_at_all" class="option-label">
+                                    <input type="radio" name="q23_appeal" id="q23_not_at_all" value="Not appealing at all" class="option-input">
+                                    <label for="q23_not_at_all" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Not appealing at all — this sounds restrictive</span>
                                     </label>
@@ -2584,51 +2480,51 @@
                             </div>
                         </div>
 
-                        <!-- Q21 -->
-                        <div class="question-group" data-question="21">
+                        <!-- Q24 -->
+                        <div class="question-group" data-question="24">
                             <div class="question-header">
-                                <span class="question-number">21</span>
+                                <span class="question-number">24</span>
                                 <label class="question-label">If you could automatically save a percentage of your stipend before you even see it, what percentage would you be comfortable saving?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q21_percent" id="q21_5" value="5% or less" class="option-input" required>
-                                    <label for="q21_5" class="option-label">
+                                    <input type="radio" name="q24_percent" id="q24_5" value="5% or less" class="option-input" required>
+                                    <label for="q24_5" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>5% or less</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q21_percent" id="q21_10" value="10%" class="option-input">
-                                    <label for="q21_10" class="option-label">
+                                    <input type="radio" name="q24_percent" id="q24_10" value="10%" class="option-input">
+                                    <label for="q24_10" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>10%</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q21_percent" id="q21_15" value="15%" class="option-input">
-                                    <label for="q21_15" class="option-label">
+                                    <input type="radio" name="q24_percent" id="q24_15" value="15%" class="option-input">
+                                    <label for="q24_15" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>15%</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q21_percent" id="q21_20" value="20%" class="option-input">
-                                    <label for="q21_20" class="option-label">
+                                    <input type="radio" name="q24_percent" id="q24_20" value="20%" class="option-input">
+                                    <label for="q24_20" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>20%</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q21_percent" id="q21_more" value="More than 20%" class="option-input">
-                                    <label for="q21_more" class="option-label">
+                                    <input type="radio" name="q24_percent" id="q24_more" value="More than 20%" class="option-input">
+                                    <label for="q24_more" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>More than 20%</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q21_percent" id="q21_no" value="No automatic savings" class="option-input">
-                                    <label for="q21_no" class="option-label">
+                                    <input type="radio" name="q24_percent" id="q24_no" value="No automatic savings" class="option-input">
+                                    <label for="q24_no" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>I wouldn't want automatic savings</span>
                                     </label>
@@ -2636,10 +2532,10 @@
                             </div>
                         </div>
 
-                        <!-- Q22 -->
-                        <div class="question-group" data-question="22">
+                        <!-- Q25 -->
+                        <div class="question-group" data-question="25">
                             <div class="question-header">
-                                <span class="question-number">22</span>
+                                <span class="question-number">25</span>
                                 <label class="question-label">Which type of savings feature sounds more useful to you?<span class="required-star">*</span></label>
                             </div>
                             <div class="question-hint">
@@ -2648,29 +2544,29 @@
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q22_feature" id="q22_a" value="Option A" class="option-input" required>
-                                    <label for="q22_a" class="option-label">
+                                    <input type="radio" name="q25_feature" id="q25_a" value="Option A" class="option-input" required>
+                                    <label for="q25_a" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Option A is more useful (Flex-Save)</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q22_feature" id="q22_b" value="Option B" class="option-input">
-                                    <label for="q22_b" class="option-label">
+                                    <input type="radio" name="q25_feature" id="q25_b" value="Option B" class="option-input">
+                                    <label for="q25_b" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Option B is more useful (Target-Save)</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q22_feature" id="q22_both" value="Both" class="option-input">
-                                    <label for="q22_both" class="option-label">
+                                    <input type="radio" name="q25_feature" id="q25_both" value="Both" class="option-input">
+                                    <label for="q25_both" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Both are equally useful — I'd want both</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q22_feature" id="q22_neither" value="Neither" class="option-input">
-                                    <label for="q22_neither" class="option-label">
+                                    <input type="radio" name="q25_feature" id="q25_neither" value="Neither" class="option-input">
+                                    <label for="q25_neither" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Neither appeals to me</span>
                                     </label>
@@ -2678,46 +2574,89 @@
                             </div>
                         </div>
 
-                        
-
-                        <!-- Q23 -->
-                        <div class="question-group" data-question="23">
+                        <!-- Q26 -->
+                        <div class="question-group" data-question="26">
                             <div class="question-header">
-                                <span class="question-number">23</span>
+                                <span class="question-number">26</span>
+                                <label class="question-label">If your savings could be invested in low-risk options (like government bonds) to earn 5-8% annually while you save, how interested would you be?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_very" value="Very interested" class="option-input" required>
+                                    <label for="q26_very" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Very interested</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_somewhat" value="Somewhat interested" class="option-input">
+                                    <label for="q26_somewhat" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Somewhat interested</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_neutral" value="Neutral" class="option-input">
+                                    <label for="q26_neutral" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Neutral</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_not" value="Not interested" class="option-input">
+                                    <label for="q26_not" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Not interested — I prefer my savings to stay as cash</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="q26_invest" id="q26_concerned" value="Concerned" class="option-input">
+                                    <label for="q26_concerned" class="option-label">
+                                        <span class="option-radio"></span>
+                                        <span>Concerned — I don't trust investments</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q27 -->
+                        <div class="question-group" data-question="27">
+                            <div class="question-header">
+                                <span class="question-number">27</span>
                                 <label class="question-label">How would you feel about receiving your stipend through an app that includes these budgeting and savings features?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q23_receive" id="q23_very_positive" value="Very positive" class="option-input" required>
-                                    <label for="q23_very_positive" class="option-label">
+                                    <input type="radio" name="q27_receive" id="q27_very_positive" value="Very positive" class="option-input" required>
+                                    <label for="q27_very_positive" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Very positive — I'd welcome this</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q23_receive" id="q23_somewhat_positive" value="Somewhat positive" class="option-input">
-                                    <label for="q23_somewhat_positive" class="option-label">
+                                    <input type="radio" name="q27_receive" id="q27_somewhat_positive" value="Somewhat positive" class="option-input">
+                                    <label for="q27_somewhat_positive" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Somewhat positive — I'd be open to trying it</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q23_receive" id="q23_neutral" value="Neutral" class="option-input">
-                                    <label for="q23_neutral" class="option-label">
+                                    <input type="radio" name="q27_receive" id="q27_neutral" value="Neutral" class="option-input">
+                                    <label for="q27_neutral" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Neutral — I'd need to see how it works first</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q23_receive" id="q23_somewhat_negative" value="Somewhat negative" class="option-input">
-                                    <label for="q23_somewhat_negative" class="option-label">
+                                    <input type="radio" name="q27_receive" id="q27_somewhat_negative" value="Somewhat negative" class="option-input">
+                                    <label for="q27_somewhat_negative" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Somewhat negative — I prefer receiving money directly</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q23_receive" id="q23_very_negative" value="Very negative" class="option-input">
-                                    <label for="q23_very_negative" class="option-label">
+                                    <input type="radio" name="q27_receive" id="q27_very_negative" value="Very negative" class="option-input">
+                                    <label for="q27_very_negative" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Very negative — I want full control over my stipend immediately</span>
                                     </label>
@@ -2728,63 +2667,150 @@
 
                     <!-- Section 7: Barriers & Trust -->
                     <div class="survey-section" data-section="7">
-    <div class="section-header">
-        <div class="section-icon">
-            <i data-lucide="shield"></i>
-        </div>
-        <div class="section-info">
-            <h2>App Concerns & Trust</h2>
-            <p>Understanding what matters most to you</p>
-        </div>
-    </div>
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i data-lucide="shield"></i>
+                            </div>
+                            <div class="section-info">
+                                <h2>Barriers, Trust & Concerns</h2>
+                                <p>Understanding what matters most to you</p>
+                            </div>
+                        </div>
 
-                        <!-- Q24 -->
-                         <div class="question-group" data-question="24">
-        <div class="question-header">
-            <span class="question-number">24</span>
-            <label class="question-label">What would be your biggest concern about using a financial app for your stipend?<span class="required-star">*</span></label>
-        </div>
-        <div class="options-list">
-            <div class="option-item">
-                <input type="radio" name="q24_concern" id="q24_security" value="Security of my money" class="option-input" required>
-                <label for="q24_security" class="option-label">
-                    <span class="option-radio"></span>
-                    <span>Security of my money</span>
-                </label>
-            </div>
-            <div class="option-item">
-                <input type="radio" name="q24_concern" id="q24_control" value="Losing control/flexibility" class="option-input">
-                <label for="q24_control" class="option-label">
-                    <span class="option-radio"></span>
-                    <span>Losing control/flexibility over my money</span>
-                </label>
-            </div>
-            <div class="option-item">
-                <input type="radio" name="q24_concern" id="q24_privacy" value="Privacy of my data" class="option-input">
-                <label for="q24_privacy" class="option-label">
-                    <span class="option-radio"></span>
-                    <span>Privacy of my financial data</span>
-                </label>
-            </div>
-            <div class="option-item">
-                <input type="radio" name="q24_concern" id="q24_emergency" value="Emergency access" class="option-input">
-                <label for="q24_emergency" class="option-label">
-                    <span class="option-radio"></span>
-                    <span>Not being able to access money in emergencies</span>
-                </label>
-            </div>
-            <div class="option-item">
-                <input type="radio" name="q24_concern" id="q24_none" value="No major concerns" class="option-input">
-                <label for="q24_none" class="option-label">
-                    <span class="option-radio"></span>
-                    <span>I don't have major concerns</span>
-                </label>
-            </div>
-        </div>
-    </div>
-</div>
-            
-                        
+                        <!-- Q28 -->
+                        <div class="question-group" data-question="28">
+                            <div class="question-header">
+                                <span class="question-number">28</span>
+                                <label class="question-label">What concerns, if any, would you have about using a student financial app to manage your stipend?</label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select all that apply</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_security" value="Security" class="option-input">
+                                    <label for="q28_security" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Security of my money</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_privacy" value="Privacy" class="option-input">
+                                    <label for="q28_privacy" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Privacy of my financial data</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_reliability" value="Reliability" class="option-input">
+                                    <label for="q28_reliability" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Reliability — what if the app fails or has errors?</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_control" value="Losing control" class="option-input">
+                                    <label for="q28_control" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Losing flexibility or control over my money</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_fees" value="Hidden fees" class="option-input">
+                                    <label for="q28_fees" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Hidden fees</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_emergency" value="Emergency access" class="option-input">
+                                    <label for="q28_emergency" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Not being able to access my money in emergencies</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_none" value="No concerns" class="option-input">
+                                    <label for="q28_none" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I don't have any major concerns</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q28_concerns[]" id="q28_other" value="Other" class="option-input">
+                                    <label for="q28_other" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" name="q28_other_specify" class="text-input" placeholder="Please specify..." style="margin-top: 12px; display: none;" id="q28_other_input">
+                        </div>
+
+                        <!-- Q29 -->
+                        <div class="question-group" data-question="29">
+                            <div class="question-header">
+                                <span class="question-number">29</span>
+                                <label class="question-label">What would make you trust a new financial app with your stipend?<span class="required-star">*</span></label>
+                            </div>
+                            <div class="question-hint">
+                                <i data-lucide="check-square"></i>
+                                <span>Select up to 3</span>
+                            </div>
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_endorsed" value="MCF/ALU endorsed" class="option-input" data-max="3">
+                                    <label for="q29_endorsed" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>It's officially endorsed by the Mastercard Foundation or ALU</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_bank" value="Backed by bank" class="option-input" data-max="3">
+                                    <label for="q29_bank" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>It's backed by a licensed, reputable bank</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_friends" value="Friends recommend" class="option-input" data-max="3">
+                                    <label for="q29_friends" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Friends or classmates recommend it</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_test" value="Test first" class="option-input" data-max="3">
+                                    <label for="q29_test" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>I can test it with a small amount before committing</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_transparent" value="Transparent terms" class="option-input" data-max="3">
+                                    <label for="q29_transparent" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Clear, transparent terms with no hidden fees</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_security" value="Strong security" class="option-input" data-max="3">
+                                    <label for="q29_security" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Strong security features (PIN, biometrics)</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="checkbox" name="q29_trust[]" id="q29_support" value="Good support" class="option-input" data-max="3">
+                                    <label for="q29_support" class="option-label">
+                                        <span class="option-checkbox"></span>
+                                        <span>Responsive customer support</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Section 8: Open-Ended -->
                     <div class="survey-section" data-section="8">
@@ -2798,24 +2824,31 @@
                             </div>
                         </div>
 
-                        <!-- Q25 -->
-                        <div class="question-group" data-question="25">
+                        <!-- Q30 -->
+                        <div class="question-group" data-question="30">
                             <div class="question-header">
-                                <span class="question-number">25</span>
+                                <span class="question-number">30</span>
                                 <label class="question-label">In your own words, what is the single biggest financial challenge you face as a student on a monthly stipend?<span class="required-star">*</span></label>
                             </div>
-                            <textarea name="q25_challenge" class="textarea-input" placeholder="Share your thoughts..." required></textarea>
+                            <textarea name="q30_challenge" class="textarea-input" placeholder="Share your thoughts..." required></textarea>
                         </div>
 
-                
-
-                        <!-- Q26 -->
-                        <div class="question-group" data-question="26">
+                        <!-- Q31 -->
+                        <div class="question-group" data-question="31">
                             <div class="question-header">
-                                <span class="question-number">26</span>
+                                <span class="question-number">31</span>
+                                <label class="question-label">If you could design the perfect financial tool for students like you, what ONE feature would it absolutely need to have?<span class="required-star">*</span></label>
+                            </div>
+                            <textarea name="q31_feature" class="textarea-input" placeholder="Describe your ideal feature..." required></textarea>
+                        </div>
+
+                        <!-- Q32 -->
+                        <div class="question-group" data-question="32">
+                            <div class="question-header">
+                                <span class="question-number">32</span>
                                 <label class="question-label">Is there anything else you'd like to share about how you manage your stipend or your financial life as a student?</label>
                             </div>
-                            <textarea name="q26_additional" class="textarea-input" placeholder="Any additional thoughts... (optional)"></textarea>
+                            <textarea name="q32_additional" class="textarea-input" placeholder="Any additional thoughts... (optional)"></textarea>
                         </div>
                     </div>
 
@@ -2831,23 +2864,23 @@
                             </div>
                         </div>
 
-                        <!-- Q27 -->
-                        <div class="question-group" data-question="27">
+                        <!-- Q33 -->
+                        <div class="question-group" data-question="33">
                             <div class="question-header">
-                                <span class="question-number">27</span>
+                                <span class="question-number">33</span>
                                 <label class="question-label">We may conduct follow-up interviews to understand student needs better. Would you be willing to participate in a 10-minute interview (with a small token of appreciation)?<span class="required-star">*</span></label>
                             </div>
                             <div class="options-list">
                                 <div class="option-item">
-                                    <input type="radio" name="q27_followup" id="q27_yes" value="Yes" class="option-input" required>
-                                    <label for="q27_yes" class="option-label">
+                                    <input type="radio" name="q33_followup" id="q33_yes" value="Yes" class="option-input" required>
+                                    <label for="q33_yes" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>Yes, I'm willing to participate</span>
                                     </label>
                                 </div>
                                 <div class="option-item">
-                                    <input type="radio" name="q27_followup" id="q27_no" value="No" class="option-input">
-                                    <label for="q27_no" class="option-label">
+                                    <input type="radio" name="q33_followup" id="q33_no" value="No" class="option-input">
+                                    <label for="q33_no" class="option-label">
                                         <span class="option-radio"></span>
                                         <span>No, thank you</span>
                                     </label>
@@ -2855,10 +2888,10 @@
                             </div>
                         </div>
 
-                        <!-- Q28 -->
-                        <div class="question-group" data-question="28" id="q28_container" style="display: none;">
+                        <!-- Q34 -->
+                        <div class="question-group" data-question="34" id="q34_container" style="display: none;">
                             <div class="question-header">
-                                <span class="question-number">28</span>
+                                <span class="question-number">34</span>
                                 <label class="question-label">Preferred contact method:</label>
                             </div>
                             <div class="question-hint">
@@ -2878,7 +2911,7 @@
                                         <i data-lucide="phone" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
                                         WhatsApp Number
                                     </label>
-                                    <input type="tel" name="q28_whatsapp" class="text-input" placeholder="+250 7XX XXX XXX" style="margin-left: 0; width: 100%;">
+                                    <input type="tel" name="q34_whatsapp" class="text-input" placeholder="+250 7XX XXX XXX" style="margin-left: 0; width: 100%;">
                                 </div>
                             </div>
                         </div>
